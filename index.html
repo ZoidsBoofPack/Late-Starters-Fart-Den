@@ -5,7 +5,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Late Starters Fart Den</title>
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
 
+.week-label {
+    color: #8b949e;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.matchups-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.matchup-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.matchup-team {
+    display: grid;
+    grid-template-columns: 45px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+}
+
+.matchup-team:first-child {
+    border-bottom: 1px solid #30363d;
+}
+
+.matchup-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #30363d;
+    object-fit: cover;
+}
+
+.matchup-name {
+    font-weight: bold;
+}
+
+.matchup-manager {
+    color: #8b949e;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.matchup-score {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.matchup-winner {
+    background: rgba(74, 222, 128, 0.06);
+}
+
+.matchup-winner .matchup-score {
+    color: #4ade80;
+}
+
+@media (max-width: 750px) {
+    .matchups-grid {
+        grid-template-columns: 1fr;
+    }
+}
 <style>
 * {
     box-sizing: border-box;
@@ -216,7 +289,18 @@ footer {
 
 </section>
 
+<section class="section" id="matchups">
 
+    <div class="section-heading">
+        <h2 class="section-title">🏈 This Week</h2>
+        <span id="week-label" class="week-label"></span>
+    </div>
+
+    <div id="matchups-grid" class="matchups-grid">
+        <div class="loading">Loading this week's carnage...</div>
+    </div>
+
+</section>
 <section class="section" id="standings">
 
     <h2 class="section-title">🏆 Standings</h2>
@@ -339,7 +423,7 @@ async function loadSite() {
         users.forEach(user => {
             usersById[user.user_id] = user;
         });
-
+await loadMatchups(usersById, rosters);
 
 
         /* -----------------------------
@@ -510,7 +594,197 @@ async function loadSite() {
 
 }
 
+async function loadMatchups(usersById, rosters) {
 
+    try {
+
+        // Sleeper's NFL state tells us the current fantasy week.
+        const state = await sleeper("/state/nfl");
+
+        const week = state.week;
+
+        document.getElementById("week-label").textContent =
+            `WEEK ${week}`;
+
+
+        // Grab this week's matchups for our league.
+        const matchups = await sleeper(
+            `/league/${LEAGUE_ID}/matchups/${week}`
+        );
+
+
+        // Build a roster lookup.
+        const rostersById = {};
+
+        rosters.forEach(roster => {
+            rostersById[roster.roster_id] = roster;
+        });
+
+
+        // Turn a Sleeper roster ID into the information
+        // we actually want to display.
+        function getTeam(rosterId) {
+
+            const roster = rostersById[rosterId];
+
+            if (!roster) {
+                return {
+                    name: "Unknown Team",
+                    manager: "",
+                    avatar: ""
+                };
+            }
+
+            const owner =
+                usersById[roster.owner_id] || {};
+
+            return {
+
+                name:
+                    owner.metadata?.team_name ||
+                    owner.display_name ||
+                    `Team ${rosterId}`,
+
+                manager:
+                    owner.display_name ||
+                    "Unknown Manager",
+
+                avatar:
+                    getAvatar(owner)
+            };
+        }
+
+
+        // Group rosters together by matchup_id.
+        const grouped = {};
+
+        matchups.forEach(entry => {
+
+            if (!grouped[entry.matchup_id]) {
+                grouped[entry.matchup_id] = [];
+            }
+
+            grouped[entry.matchup_id].push(entry);
+
+        });
+
+
+        const grid =
+            document.getElementById("matchups-grid");
+
+        grid.innerHTML = "";
+
+
+        // Display each matchup.
+        Object.values(grouped).forEach(game => {
+
+            if (game.length < 2) {
+                return;
+            }
+
+            const first = game[0];
+            const second = game[1];
+
+            const teamOne =
+                getTeam(first.roster_id);
+
+            const teamTwo =
+                getTeam(second.roster_id);
+
+            const scoreOne =
+                Number(first.points || 0);
+
+            const scoreTwo =
+                Number(second.points || 0);
+
+
+            const card =
+                document.createElement("div");
+
+            card.className = "matchup-card";
+
+
+            function teamRow(team, score, winner) {
+
+                const avatar = team.avatar
+                    ? `<img
+                        class="matchup-avatar"
+                        src="${team.avatar}"
+                        alt="">`
+                    : `<div class="matchup-avatar"></div>`;
+
+
+                return `
+
+                    <div class="matchup-team
+                        ${winner ? "matchup-winner" : ""}">
+
+                        ${avatar}
+
+                        <div>
+
+                            <div class="matchup-name">
+                                ${team.name}
+                            </div>
+
+                            <div class="matchup-manager">
+                                ${team.manager}
+                            </div>
+
+                        </div>
+
+                        <div class="matchup-score">
+                            ${score.toFixed(2)}
+                        </div>
+
+                    </div>
+
+                `;
+            }
+
+
+            card.innerHTML =
+
+                teamRow(
+                    teamOne,
+                    scoreOne,
+                    scoreOne > scoreTwo
+                )
+
+                +
+
+                teamRow(
+                    teamTwo,
+                    scoreTwo,
+                    scoreTwo > scoreOne
+                );
+
+
+            grid.appendChild(card);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Matchup loading error:",
+            error
+        );
+
+        document.getElementById(
+            "matchups-grid"
+        ).innerHTML = `
+
+            <div class="loading error">
+                Couldn't load this week's matchups.
+            </div>
+
+        `;
+
+    }
+
+}
 loadSite();
 
 </script>
