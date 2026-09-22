@@ -11,6 +11,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
     background: #0d1117;
@@ -19,7 +23,7 @@ body {
 }
 
 header {
-    padding: 45px 20px 30px;
+    padding: 50px 20px 34px;
     text-align: center;
     background: #161b22;
     border-bottom: 3px solid #4ade80;
@@ -27,22 +31,27 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: clamp(32px, 6vw, 54px);
+    font-size: clamp(34px, 6vw, 56px);
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 header p {
     color: #9ca3af;
-    margin-bottom: 0;
+    margin: 10px 0 0;
 }
 
 nav {
-    background: #090c10;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(9, 12, 16, 0.96);
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 25px;
     padding: 16px;
+    border-bottom: 1px solid #21262d;
 }
 
 nav a {
@@ -61,7 +70,7 @@ main {
 }
 
 .section {
-    margin-bottom: 45px;
+    margin-bottom: 48px;
 }
 
 .section-title {
@@ -102,6 +111,57 @@ main {
 .error {
     color: #f87171;
 }
+
+
+/* AWARDS */
+
+.awards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.award-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 175px;
+}
+
+.award-icon {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.award-title {
+    color: #8b949e;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 9px;
+}
+
+.award-team {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.25;
+}
+
+.award-detail {
+    color: #4ade80;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.award-subtext {
+    color: #8b949e;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
 
 /* MATCHUPS */
 
@@ -160,6 +220,7 @@ main {
 .matchup-team.leading .matchup-score {
     color: #4ade80;
 }
+
 
 /* STANDINGS */
 
@@ -234,6 +295,15 @@ footer {
     font-size: 13px;
 }
 
+
+@media (max-width: 900px) {
+
+    .awards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
 @media (max-width: 750px) {
 
     .matchups-grid {
@@ -241,7 +311,12 @@ footer {
     }
 }
 
+
 @media (max-width: 650px) {
+
+    .awards-grid {
+        grid-template-columns: 1fr;
+    }
 
     .standings-row {
         grid-template-columns: 35px 1fr 60px 75px;
@@ -273,6 +348,7 @@ footer {
 
 <nav>
     <a href="#">Home</a>
+    <a href="#awards">Awards</a>
     <a href="#matchups">Matchups</a>
     <a href="#standings">Standings</a>
     <a href="#">Teams</a>
@@ -281,6 +357,7 @@ footer {
 </nav>
 
 <main>
+
 
 <section class="section">
 
@@ -295,6 +372,34 @@ footer {
         <p id="league-summary">
             Loading league information...
         </p>
+
+    </div>
+
+</section>
+
+
+<section class="section" id="awards">
+
+    <div class="section-heading">
+
+        <h2 class="section-title">
+            🏅 Weekly Fart Den Awards
+        </h2>
+
+        <span
+            id="awards-week"
+            class="week-label">
+        </span>
+
+    </div>
+
+    <div
+        id="awards-grid"
+        class="awards-grid">
+
+        <div class="loading">
+            Calculating this week's nonsense...
+        </div>
 
     </div>
 
@@ -369,18 +474,21 @@ footer {
 <script>
 
 const LEAGUE_ID = "1313301144683958272";
-
 const API = "https://api.sleeper.app/v1";
 
 
 async function sleeper(endpoint) {
 
-    const response = await fetch(API + endpoint);
+    const response =
+        await fetch(API + endpoint);
 
     if (!response.ok) {
+
         throw new Error(
-            "Sleeper API error: " + response.status
+            "Sleeper API error: " +
+            response.status
         );
+
     }
 
     return response.json();
@@ -393,7 +501,9 @@ function getPointsFor(settings) {
 
     return (
         Number(settings.fpts || 0) +
-        Number(settings.fpts_decimal || 0) / 100
+        Number(
+            settings.fpts_decimal || 0
+        ) / 100
     );
 }
 
@@ -411,20 +521,28 @@ function getAvatar(user) {
 }
 
 
-function getTeamInfo(roster, usersById) {
+function getTeamInfo(
+    roster,
+    usersById
+) {
 
     const owner =
-        usersById[roster.owner_id] || {};
+        usersById[
+            roster.owner_id
+        ] || {};
 
     return {
 
         name:
-            (owner.metadata &&
-             owner.metadata.team_name)
+            (
+                owner.metadata &&
+                owner.metadata.team_name
+            )
             ||
             owner.display_name
             ||
-            "Team " + roster.roster_id,
+            "Team " +
+            roster.roster_id,
 
         manager:
             owner.display_name ||
@@ -437,12 +555,19 @@ function getTeamInfo(roster, usersById) {
 }
 
 
-function avatarHTML(url, className) {
+function avatarHTML(
+    url,
+    className
+) {
 
     if (!url) {
-        return '<div class="' +
+
+        return (
+            '<div class="' +
             className +
-            '"></div>';
+            '"></div>'
+        );
+
     }
 
     return (
@@ -455,86 +580,98 @@ function avatarHTML(url, className) {
 }
 
 
+/* -------------------------
+   STANDINGS
+-------------------------- */
+
 function renderStandings(
     rosters,
     usersById
 ) {
 
     const standings =
-        rosters.map(function(roster) {
+        rosters.map(
+            function(roster) {
 
-            const team =
-                getTeamInfo(
-                    roster,
-                    usersById
-                );
+                const team =
+                    getTeamInfo(
+                        roster,
+                        usersById
+                    );
 
-            return {
+                return {
 
-                rosterId:
-                    roster.roster_id,
+                    teamName:
+                        team.name,
 
-                teamName:
-                    team.name,
+                    manager:
+                        team.manager,
 
-                manager:
-                    team.manager,
+                    avatar:
+                        team.avatar,
 
-                avatar:
-                    team.avatar,
+                    wins:
+                        Number(
+                            roster.settings &&
+                            roster.settings.wins
+                            || 0
+                        ),
 
-                wins:
-                    Number(
-                        roster.settings &&
-                        roster.settings.wins
-                        || 0
-                    ),
+                    losses:
+                        Number(
+                            roster.settings &&
+                            roster.settings.losses
+                            || 0
+                        ),
 
-                losses:
-                    Number(
-                        roster.settings &&
-                        roster.settings.losses
-                        || 0
-                    ),
+                    ties:
+                        Number(
+                            roster.settings &&
+                            roster.settings.ties
+                            || 0
+                        ),
 
-                ties:
-                    Number(
-                        roster.settings &&
-                        roster.settings.ties
-                        || 0
-                    ),
+                    pointsFor:
+                        getPointsFor(
+                            roster.settings
+                        )
 
-                pointsFor:
-                    getPointsFor(
-                        roster.settings
-                    )
+                };
 
-            };
-
-        });
+            }
+        );
 
 
     standings.sort(
         function(a, b) {
 
-            if (b.wins !== a.wins) {
-                return b.wins - a.wins;
+            if (
+                b.wins !==
+                a.wins
+            ) {
+
+                return (
+                    b.wins -
+                    a.wins
+                );
+
             }
 
             return (
                 b.pointsFor -
                 a.pointsFor
             );
+
         }
     );
 
 
-    const standingsBody =
+    const body =
         document.getElementById(
             "standings-body"
         );
 
-    standingsBody.innerHTML = "";
+    body.innerHTML = "";
 
 
     standings.forEach(
@@ -559,6 +696,7 @@ function renderStandings(
                 record +=
                     "-" +
                     team.ties;
+
             }
 
 
@@ -598,14 +736,342 @@ function renderStandings(
                 '</div>';
 
 
-            standingsBody.appendChild(
-                row
-            );
+            body.appendChild(row);
 
         }
     );
 }
 
+
+/* -------------------------
+   WEEKLY AWARDS
+-------------------------- */
+
+function renderAwards(
+    games,
+    week
+) {
+
+    const grid =
+        document.getElementById(
+            "awards-grid"
+        );
+
+    document.getElementById(
+        "awards-week"
+    ).textContent =
+        "WEEK " + week;
+
+
+    if (!games.length) {
+
+        grid.innerHTML =
+            '<div class="loading">' +
+            'Awards will appear once matchups are available.' +
+            '</div>';
+
+        return;
+    }
+
+
+    const teams = [];
+
+    games.forEach(
+        function(game) {
+
+            teams.push({
+                name:
+                    game.teamOne.name,
+
+                score:
+                    game.scoreOne
+            });
+
+            teams.push({
+                name:
+                    game.teamTwo.name,
+
+                score:
+                    game.scoreTwo
+            });
+
+        }
+    );
+
+
+    const scoringStarted =
+        teams.some(
+            function(team) {
+                return team.score > 0;
+            }
+        );
+
+
+    if (!scoringStarted) {
+
+        grid.innerHTML =
+
+            '<div class="league-card" style="grid-column: 1 / -1;">' +
+
+                '<strong>Week ' +
+                week +
+                ' awards are waiting for kickoff.</strong>' +
+
+                '<p style="color:#8b949e; margin-bottom:0;">' +
+                'Once points start hitting the board, the Fart Den will begin handing out honors and public humiliation.' +
+                '</p>' +
+
+            '</div>';
+
+        return;
+    }
+
+
+    const highest =
+        teams.reduce(
+            function(best, team) {
+
+                return (
+                    team.score >
+                    best.score
+                )
+                ? team
+                : best;
+
+            }
+        );
+
+
+    const lowest =
+        teams.reduce(
+            function(worst, team) {
+
+                return (
+                    team.score <
+                    worst.score
+                )
+                ? team
+                : worst;
+
+            }
+        );
+
+
+    const margins =
+        games.map(
+            function(game) {
+
+                return {
+
+                    teamOne:
+                        game.teamOne,
+
+                    teamTwo:
+                        game.teamTwo,
+
+                    scoreOne:
+                        game.scoreOne,
+
+                    scoreTwo:
+                        game.scoreTwo,
+
+                    margin:
+                        Math.abs(
+                            game.scoreOne -
+                            game.scoreTwo
+                        )
+
+                };
+
+            }
+        );
+
+
+    const biggest =
+        margins.reduce(
+            function(best, game) {
+
+                return (
+                    game.margin >
+                    best.margin
+                )
+                ? game
+                : best;
+
+            }
+        );
+
+
+    const closest =
+        margins.reduce(
+            function(best, game) {
+
+                return (
+                    game.margin <
+                    best.margin
+                )
+                ? game
+                : best;
+
+            }
+        );
+
+
+    let blowoutWinner;
+    let blowoutLoser;
+
+    if (
+        biggest.scoreOne >
+        biggest.scoreTwo
+    ) {
+
+        blowoutWinner =
+            biggest.teamOne.name;
+
+        blowoutLoser =
+            biggest.teamTwo.name;
+
+    } else {
+
+        blowoutWinner =
+            biggest.teamTwo.name;
+
+        blowoutLoser =
+            biggest.teamOne.name;
+
+    }
+
+
+    let closeWinner;
+    let closeLoser;
+
+    if (
+        closest.scoreOne >
+        closest.scoreTwo
+    ) {
+
+        closeWinner =
+            closest.teamOne.name;
+
+        closeLoser =
+            closest.teamTwo.name;
+
+    } else {
+
+        closeWinner =
+            closest.teamTwo.name;
+
+        closeLoser =
+            closest.teamOne.name;
+
+    }
+
+
+    grid.innerHTML =
+
+        '<div class="award-card">' +
+
+            '<div class="award-icon">👑</div>' +
+
+            '<div class="award-title">' +
+                'King of the Fart Den' +
+            '</div>' +
+
+            '<div class="award-team">' +
+                highest.name +
+            '</div>' +
+
+            '<div class="award-detail">' +
+                highest.score.toFixed(2) +
+                ' points' +
+            '</div>' +
+
+            '<div class="award-subtext">' +
+                'Highest score of the week' +
+            '</div>' +
+
+        '</div>' +
+
+
+        '<div class="award-card">' +
+
+            '<div class="award-icon">💩</div>' +
+
+            '<div class="award-title">' +
+                'Basement Dweller' +
+            '</div>' +
+
+            '<div class="award-team">' +
+                lowest.name +
+            '</div>' +
+
+            '<div class="award-detail">' +
+                lowest.score.toFixed(2) +
+                ' points' +
+            '</div>' +
+
+            '<div class="award-subtext">' +
+                'Someone had to finish last' +
+            '</div>' +
+
+        '</div>' +
+
+
+        '<div class="award-card">' +
+
+            '<div class="award-icon">🔨</div>' +
+
+            '<div class="award-title">' +
+                'Ass Whooping of the Week' +
+            '</div>' +
+
+            '<div class="award-team">' +
+                blowoutWinner +
+            '</div>' +
+
+            '<div class="award-detail">' +
+                'Won by ' +
+                biggest.margin.toFixed(2) +
+            '</div>' +
+
+            '<div class="award-subtext">' +
+                'Victim: ' +
+                blowoutLoser +
+            '</div>' +
+
+        '</div>' +
+
+
+        '<div class="award-card">' +
+
+            '<div class="award-icon">😬</div>' +
+
+            '<div class="award-title">' +
+                'Heartbreaker' +
+            '</div>' +
+
+            '<div class="award-team">' +
+                closeLoser +
+            '</div>' +
+
+            '<div class="award-detail">' +
+                'Lost by ' +
+                closest.margin.toFixed(2) +
+            '</div>' +
+
+            '<div class="award-subtext">' +
+                'Winner: ' +
+                closeWinner +
+            '</div>' +
+
+        '</div>';
+
+}
+
+
+/* -------------------------
+   MATCHUPS
+-------------------------- */
 
 async function renderMatchups(
     rosters,
@@ -613,10 +1079,13 @@ async function renderMatchups(
 ) {
 
     const state =
-        await sleeper("/state/nfl");
+        await sleeper(
+            "/state/nfl"
+        );
 
     const week =
         Number(state.week);
+
 
     document.getElementById(
         "week-label"
@@ -626,10 +1095,12 @@ async function renderMatchups(
 
     const matchups =
         await sleeper(
+
             "/league/" +
             LEAGUE_ID +
             "/matchups/" +
             week
+
         );
 
 
@@ -654,8 +1125,10 @@ async function renderMatchups(
             const id =
                 matchup.matchup_id;
 
-            if (id === null ||
-                id === undefined) {
+            if (
+                id === null ||
+                id === undefined
+            ) {
                 return;
             }
 
@@ -679,34 +1152,33 @@ async function renderMatchups(
     grid.innerHTML = "";
 
 
-    const matchupIds =
-        Object.keys(grouped).sort(
+    const ids =
+        Object.keys(
+            grouped
+        ).sort(
             function(a, b) {
-                return Number(a) -
-                       Number(b);
+
+                return (
+                    Number(a) -
+                    Number(b)
+                );
+
             }
         );
 
 
-    if (matchupIds.length === 0) {
-
-        grid.innerHTML =
-            '<div class="loading">' +
-            'No matchups available for Week ' +
-            week +
-            '.</div>';
-
-        return;
-    }
+    const games = [];
 
 
-    matchupIds.forEach(
-        function(matchupId) {
+    ids.forEach(
+        function(id) {
 
             const game =
-                grouped[matchupId];
+                grouped[id];
 
-            if (game.length !== 2) {
+            if (
+                game.length !== 2
+            ) {
                 return;
             }
 
@@ -729,8 +1201,10 @@ async function renderMatchups(
                 ];
 
 
-            if (!rosterOne ||
-                !rosterTwo) {
+            if (
+                !rosterOne ||
+                !rosterTwo
+            ) {
                 return;
             }
 
@@ -759,6 +1233,23 @@ async function renderMatchups(
                 );
 
 
+            games.push({
+
+                teamOne:
+                    teamOne,
+
+                teamTwo:
+                    teamTwo,
+
+                scoreOne:
+                    scoreOne,
+
+                scoreTwo:
+                    scoreTwo
+
+            });
+
+
             const card =
                 document.createElement(
                     "div"
@@ -777,9 +1268,11 @@ async function renderMatchups(
                 return (
 
                     '<div class="matchup-team ' +
-                    (leading
+                    (
+                        leading
                         ? 'leading'
-                        : '') +
+                        : ''
+                    ) +
                     '">' +
 
                         avatarHTML(
@@ -806,6 +1299,7 @@ async function renderMatchups(
                     '</div>'
 
                 );
+
             }
 
 
@@ -826,12 +1320,36 @@ async function renderMatchups(
                 );
 
 
-            grid.appendChild(card);
+            grid.appendChild(
+                card
+            );
 
         }
     );
+
+
+    if (!games.length) {
+
+        grid.innerHTML =
+            '<div class="loading">' +
+            'No matchups available for Week ' +
+            week +
+            '.</div>';
+
+    }
+
+
+    renderAwards(
+        games,
+        week
+    );
+
 }
 
+
+/* -------------------------
+   LOAD EVERYTHING
+-------------------------- */
 
 async function loadSite() {
 
@@ -873,6 +1391,7 @@ async function loadSite() {
         document.getElementById(
             "league-name"
         ).textContent =
+
             league.name ||
             "Fantasy Football League";
 
@@ -901,8 +1420,10 @@ async function loadSite() {
         ).textContent =
 
             "League status: " +
-            (league.status ||
-             "Unknown");
+            (
+                league.status ||
+                "Unknown"
+            );
 
 
         const usersById = {};
@@ -934,7 +1455,6 @@ async function loadSite() {
         } catch (matchupError) {
 
             console.error(
-                "Matchup error:",
                 matchupError
             );
 
@@ -944,6 +1464,15 @@ async function loadSite() {
 
                 '<div class="loading error">' +
                 "Couldn't load this week's matchups." +
+                '</div>';
+
+
+            document.getElementById(
+                "awards-grid"
+            ).innerHTML =
+
+                '<div class="loading error">' +
+                "Couldn't calculate this week's awards." +
                 '</div>';
 
         }
@@ -978,6 +1507,15 @@ async function loadSite() {
 
             '<div class="loading error">' +
             "Couldn't load matchups." +
+            '</div>';
+
+
+        document.getElementById(
+            "awards-grid"
+        ).innerHTML =
+
+            '<div class="loading error">' +
+            "Couldn't calculate awards." +
             '</div>';
 
     }
