@@ -549,7 +549,6 @@ footer {
     font-size: 13px;
 }
 
-
 @media (max-width:900px) {
     .awards-grid { grid-template-columns: repeat(2,1fr); }
     .teams-grid { grid-template-columns: repeat(2,1fr); }
@@ -609,9 +608,9 @@ footer {
         grid-template-columns: 45px 1fr 50px;
     }
 
-    .starter-badge { display:none; }
+    .starter-badge { display: none; }
 
-    nav { gap:15px; }
+    nav { gap: 15px; }
 }
 </style>
 </head>
@@ -652,7 +651,7 @@ footer {
     </div>
 
     <div id="awards-grid" class="awards-grid">
-        <div class="loading">Calculating this week's nonsense...</div>
+        <div class="loading">Finding the latest completed disaster...</div>
     </div>
 
 </section>
@@ -698,13 +697,11 @@ footer {
 
     <div class="section-heading">
         <h2 class="section-title">⚡ Fart Den Power Rankings</h2>
-        <span class="week-label">NO FEELINGS. JUST NUMBERS.</span>
+        <span id="power-week" class="week-label"></span>
     </div>
 
     <div id="power-list" class="power-list">
-        <div class="loading">
-            Judging everyone's terrible decisions...
-        </div>
+        <div class="loading">Judging everyone's terrible decisions...</div>
     </div>
 
 </section>
@@ -783,7 +780,10 @@ const API = "https://api.sleeper.app/v1";
 let GLOBAL_ROSTERS = [];
 let GLOBAL_USERS_BY_ID = {};
 let NFL_PLAYERS = null;
-let CURRENT_WEEK_SCORES = {};
+
+let CURRENT_WEEK = 1;
+let LATEST_COMPLETED_WEEK = 1;
+let LATEST_COMPLETED_SCORES = {};
 
 
 async function sleeper(endpoint) {
@@ -864,6 +864,78 @@ function rosterRecord(roster) {
 }
 
 
+/* TURN RAW MATCHUPS INTO GAMES */
+
+function buildGames(matchups) {
+
+    const rostersById = {};
+
+    GLOBAL_ROSTERS.forEach(function(roster) {
+        rostersById[roster.roster_id] = roster;
+    });
+
+
+    const grouped = {};
+
+    matchups.forEach(function(matchup) {
+
+        const id = matchup.matchup_id;
+
+        if (id === null || id === undefined) {
+            return;
+        }
+
+        if (!grouped[id]) {
+            grouped[id] = [];
+        }
+
+        grouped[id].push(matchup);
+    });
+
+
+    const games = [];
+
+    Object.keys(grouped)
+        .sort(function(a,b) {
+            return Number(a) - Number(b);
+        })
+        .forEach(function(id) {
+
+            const game = grouped[id];
+
+            if (game.length !== 2) return;
+
+
+            const first = game[0];
+            const second = game[1];
+
+            const rosterOne =
+                rostersById[first.roster_id];
+
+            const rosterTwo =
+                rostersById[second.roster_id];
+
+            if (!rosterOne || !rosterTwo) return;
+
+
+            games.push({
+                rosterOneId: first.roster_id,
+                rosterTwoId: second.roster_id,
+
+                teamOne: getTeamInfo(rosterOne),
+                teamTwo: getTeamInfo(rosterTwo),
+
+                scoreOne: Number(first.points || 0),
+                scoreTwo: Number(second.points || 0)
+            });
+
+        });
+
+
+    return games;
+}
+
+
 /* STANDINGS */
 
 function renderStandings() {
@@ -871,13 +943,15 @@ function renderStandings() {
     const standings =
         GLOBAL_ROSTERS.map(function(roster) {
 
-            const team = getTeamInfo(roster);
-
             return {
                 roster: roster,
-                team: team,
-                wins: Number(roster.settings && roster.settings.wins || 0),
-                pointsFor: getPointsFor(roster.settings)
+                team: getTeamInfo(roster),
+                wins: Number(
+                    roster.settings &&
+                    roster.settings.wins || 0
+                ),
+                pointsFor:
+                    getPointsFor(roster.settings)
             };
         });
 
@@ -900,9 +974,11 @@ function renderStandings() {
 
     standings.forEach(function(item,index) {
 
-        const row = document.createElement("div");
+        const row =
+            document.createElement("div");
 
         row.className = "standings-row";
+
 
         row.innerHTML =
 
@@ -912,7 +988,10 @@ function renderStandings() {
 
             '<div class="team">' +
 
-                avatarHTML(item.team.avatar,"avatar") +
+                avatarHTML(
+                    item.team.avatar,
+                    "avatar"
+                ) +
 
                 '<div>' +
 
@@ -936,140 +1015,111 @@ function renderStandings() {
             item.pointsFor.toFixed(2) +
             '</div>';
 
+
         body.appendChild(row);
     });
 }
 
 
-/* POWER RANKINGS */
+/* UNIQUE POWER RANKING DESCRIPTIONS */
 
-function getRoast(team,rank,totalTeams,averages) {
+function getRankDescription(team,rank,averages) {
 
-    const winPct = team.winPct;
-    const pf = team.pf;
-    const weekly = team.weekScore;
+    const lucky =
+        team.winPct > averages.winPct &&
+        team.pf < averages.pf;
 
-    const pfRatio =
-        averages.pf > 0
-        ? pf / averages.pf
-        : 1;
+    const unlucky =
+        team.winPct < averages.winPct &&
+        team.pf > averages.pf;
 
-    const recordRatio =
-        averages.winPct > 0
-        ? winPct / averages.winPct
-        : 1;
+    const hot =
+        team.weekScore >
+        averages.weekScore * 1.15;
 
-
-    if (rank === totalTeams) {
-
-        return "Dead last. No advanced metric, no excuse, no moral victory. This team just fucking sucks right now.";
-    }
+    const cold =
+        team.weekScore > 0 &&
+        team.weekScore <
+        averages.weekScore * .80;
 
 
-    if (
-        rank >= totalTeams - 2 &&
-        pfRatio < .9
-    ) {
+    const descriptions = {
 
-        return "The standings are ugly and the scoring is somehow worse. At this point the lineup is less of a strategy and more of a cry for help.";
-    }
+        1:
+            lucky
+            ? "Sitting at #1 while the scoring numbers look suspicious as hell. Either this is elite efficiency or the luckiest bastard in the league."
+            : "Unfortunately, the numbers say this asshole is actually good. Best power profile in the league and currently very little evidence that it's bullshit.",
 
+        2:
+            hot
+            ? "Right on #1's ass and just put up another big week. Annoying as hell, but the numbers are doing most of the talking."
+            : "Close enough to the top to be dangerous, but still technically the first loser. One bad week and everybody gets to stop pretending to be impressed.",
 
-    if (
-        winPct >= .65 &&
-        pfRatio < .95
-    ) {
+        3:
+            lucky
+            ? "Third place with a point total that deserves an investigation. The record looks good. The underlying bullshit does not."
+            : "Legitimate contender territory. Good enough to talk shit, but not good enough that anybody has to listen yet.",
 
-        return "The record says contender. The points say this asshole has been getting away with murder. Enjoy it before the bullshit catches up.";
-    }
+        4:
+            unlucky
+            ? "The scoring says this team should probably be higher. The results say nobody gives a shit what should have happened."
+            : "Just outside the top three. Basically standing outside the VIP section arguing with the bouncer about how close you are.",
 
+        5:
+            hot
+            ? "Fifth and heating up. One more strong week and this team becomes somebody else's problem."
+            : "Good enough that nobody wants an easy matchup against them. Still not good enough to walk around acting important.",
 
-    if (
-        winPct < .5 &&
-        pfRatio > 1.08
-    ) {
+        6:
+            lucky
+            ? "Sixth with a record doing significantly more work than the actual scoring. This thing is being held together by bullshit and favorable matchups."
+            : "The upper edge of mediocrity. There are signs of life here, but nobody is losing sleep over it.",
 
-        return "Scores enough points to win and still keeps eating shit. A genuinely impressive waste of production.";
-    }
+        7:
+            unlucky
+            ? "Dead center of the rankings despite scoring better than the record suggests. Congratulations on turning useful points into absolutely nothing."
+            : "Seventh out of fourteen. Perfectly balanced between being respectable and being completely fucking forgettable.",
 
+        8:
+            hot
+            ? "Still in the bottom half, but at least somebody finally found the gas pedal. Keep it up and people may have to stop laughing."
+            : "Eighth place. Not technically bad enough for a funeral, but somebody should probably start making arrangements.",
 
-    if (
-        winPct >= .65 &&
-        pfRatio >= 1.08
-    ) {
+        9:
+            unlucky
+            ? "The points aren't terrible. The results are. Fantasy football's version of doing all the homework and still failing the test."
+            : "One decent week away from talking an unbelievable amount of shit for a team that has accomplished almost nothing.",
 
-        return "Unfortunately, the numbers say this asshole is actually good. We checked twice.";
-    }
+        10:
+            hot
+            ? "Tenth, but coming off a strong week. Maybe this is the beginning of a comeback. Maybe it's one last twitch from the corpse."
+            : "Double-digit ranking territory. At this point every win should come with a small parade and a handwritten thank-you note.",
 
+        11:
+            lucky
+            ? "Even the wins feel fraudulent down here. The record is desperately trying to convince everyone this isn't as bad as it looks."
+            : "Eleventh. The playoff dream isn't dead, but somebody definitely unplugged the life support to charge their phone.",
 
-    if (
-        rank <= 3 &&
-        weekly > averages.week * 1.1
-    ) {
+        12:
+            cold
+            ? "Twelfth and somehow still finding new ways to lower expectations. That latest score belongs in a fucking police report."
+            : "At this point the starting lineup is less of a strategy and more of a cry for help.",
 
-        return "Already near the top and still putting up stupid numbers. Somebody please beat this prick before the group chat becomes unbearable.";
-    }
+        13:
+            hot
+            ? "Thirteenth, but at least the latest week showed a pulse. That's the nicest thing the numbers are willing to say."
+            : "Second worst team in the rankings. The main accomplishment here is having somebody else around who's somehow doing worse.",
 
-
-    if (
-        weekly > averages.week * 1.2
-    ) {
-
-        return "Apparently decided this was the week to stop fucking around. Huge score. We'll see if it lasts.";
-    }
-
-
-    if (
-        weekly > 0 &&
-        weekly < averages.week * .75
-    ) {
-
-        return "That weekly score belongs in evidence. Whatever the game plan was, burn it.";
-    }
-
-
-    if (
-        pfRatio > 1.08 &&
-        recordRatio < .95
-    ) {
-
-        return "The points are respectable. The record isn't. Congratulations on being good at fantasy football except for the part where you actually win.";
-    }
-
-
-    if (
-        pfRatio < .9 &&
-        recordRatio > 1.05
-    ) {
-
-        return "Good record. Suspicious point total. This operation has fraud written all over it.";
-    }
+        14:
+            "Dead fucking last. No advanced metric, no excuse, no moral victory. Fourteen teams showed up and this one currently sucks the most."
+    };
 
 
-    if (
-        rank >= 5 &&
-        rank <= 10
-    ) {
-
-        return "The definition of mid. Too good to laugh at every week, too shitty to take seriously.";
-    }
-
-
-    if (rank <= 4) {
-
-        return "Solid record, solid scoring, annoyingly few reasons to talk shit. For now.";
-    }
-
-
-    if (rank >= totalTeams - 4) {
-
-        return "One decent week away from talking an unbelievable amount of shit for a team that has accomplished absolutely nothing.";
-    }
-
-
-    return "Not a disaster. Not particularly scary either. Basically just occupying space in the standings.";
+    return descriptions[rank];
 }
 
+
+/* POWER RANKINGS */
 
 function renderPowerRankings() {
 
@@ -1077,37 +1127,47 @@ function renderPowerRankings() {
         document.getElementById("power-list");
 
 
+    document.getElementById("power-week").textContent =
+        "THROUGH WEEK " +
+        LATEST_COMPLETED_WEEK;
+
+
     const teams =
         GLOBAL_ROSTERS.map(function(roster) {
 
             const settings = roster.settings || {};
-            const info = getTeamInfo(roster);
 
-            const wins = Number(settings.wins || 0);
-            const losses = Number(settings.losses || 0);
-            const ties = Number(settings.ties || 0);
+            const wins =
+                Number(settings.wins || 0);
 
-            const games = wins + losses + ties;
+            const losses =
+                Number(settings.losses || 0);
+
+            const ties =
+                Number(settings.ties || 0);
+
+            const games =
+                wins + losses + ties;
 
             const winPct =
                 games > 0
                 ? (wins + ties * .5) / games
                 : 0;
 
-            const pf = getPointsFor(settings);
+            const pf =
+                getPointsFor(settings);
 
             const weekScore =
                 Number(
-                    CURRENT_WEEK_SCORES[
+                    LATEST_COMPLETED_SCORES[
                         roster.roster_id
                     ] || 0
                 );
 
+
             return {
                 roster: roster,
-                info: info,
-                wins: wins,
-                losses: losses,
+                info: getTeamInfo(roster),
                 winPct: winPct,
                 pf: pf,
                 weekScore: weekScore
@@ -1146,6 +1206,7 @@ function renderPowerRankings() {
             ? (team.weekScore / maxWeek) * 10
             : 0;
 
+
         team.powerScore =
             recordScore +
             scoringScore +
@@ -1154,7 +1215,12 @@ function renderPowerRankings() {
 
 
     teams.sort(function(a,b) {
-        return b.powerScore - a.powerScore;
+
+        if (b.powerScore !== a.powerScore) {
+            return b.powerScore - a.powerScore;
+        }
+
+        return b.pf - a.pf;
     });
 
 
@@ -1170,7 +1236,7 @@ function renderPowerRankings() {
                 return sum + t.winPct;
             },0) / teams.length,
 
-        week:
+        weekScore:
             teams.reduce(function(sum,t) {
                 return sum + t.weekScore;
             },0) / teams.length
@@ -1184,11 +1250,10 @@ function renderPowerRankings() {
 
         const rank = index + 1;
 
-        const roast =
-            getRoast(
+        const description =
+            getRankDescription(
                 team,
                 rank,
-                teams.length,
                 averages
             );
 
@@ -1223,7 +1288,7 @@ function renderPowerRankings() {
                 '</div>' +
 
                 '<div class="power-roast">' +
-                roast +
+                description +
                 '</div>' +
 
             '</div>' +
@@ -1243,6 +1308,13 @@ function renderPowerRankings() {
                 ' • ' +
                 team.pf.toFixed(2) +
                 ' PF' +
+                '</div>' +
+
+                '<div class="power-mini">' +
+                'Week ' +
+                LATEST_COMPLETED_WEEK +
+                ': ' +
+                team.weekScore.toFixed(2) +
                 '</div>' +
 
             '</div>';
@@ -1265,16 +1337,22 @@ function renderTeams() {
 
     GLOBAL_ROSTERS.forEach(function(roster) {
 
-        const team = getTeamInfo(roster);
+        const team =
+            getTeamInfo(roster);
 
         const card =
             document.createElement("div");
 
-        card.className = "team-card";
+        card.className =
+            "team-card";
 
-        card.onclick = function() {
-            openTeamProfile(roster.roster_id);
-        };
+
+        card.onclick =
+            function() {
+                openTeamProfile(
+                    roster.roster_id
+                );
+            };
 
 
         card.innerHTML =
@@ -1312,11 +1390,14 @@ function renderTeams() {
                 '<div>' +
                     '<div class="team-stat-label">PF</div>' +
                     '<div class="team-stat-value">' +
-                    getPointsFor(roster.settings).toFixed(2) +
+                    getPointsFor(
+                        roster.settings
+                    ).toFixed(2) +
                     '</div>' +
                 '</div>' +
 
             '</div>';
+
 
         grid.appendChild(card);
     });
@@ -1333,73 +1414,118 @@ async function openTeamProfile(rosterId) {
     if (!roster) return;
 
 
-    const team = getTeamInfo(roster);
+    const team =
+        getTeamInfo(roster);
 
 
-    document.getElementById("profile-avatar-wrap").innerHTML =
-        avatarHTML(team.avatar,"profile-avatar");
+    document.getElementById(
+        "profile-avatar-wrap"
+    ).innerHTML =
+        avatarHTML(
+            team.avatar,
+            "profile-avatar"
+        );
 
-    document.getElementById("profile-name").textContent =
+
+    document.getElementById(
+        "profile-name"
+    ).textContent =
         team.name;
 
-    document.getElementById("profile-manager").textContent =
-        "Manager: " + team.manager;
 
-    document.getElementById("profile-record").textContent =
+    document.getElementById(
+        "profile-manager"
+    ).textContent =
+        "Manager: " +
+        team.manager;
+
+
+    document.getElementById(
+        "profile-record"
+    ).textContent =
         rosterRecord(roster);
 
-    document.getElementById("profile-pf").textContent =
-        getPointsFor(roster.settings).toFixed(2);
+
+    document.getElementById(
+        "profile-pf"
+    ).textContent =
+        getPointsFor(
+            roster.settings
+        ).toFixed(2);
 
 
-    const playerIds = roster.players || [];
+    const playerIds =
+        roster.players || [];
 
-    document.getElementById("profile-roster-count").textContent =
+
+    document.getElementById(
+        "profile-roster-count"
+    ).textContent =
         playerIds.length;
 
 
     const profile =
-        document.getElementById("team-profile");
+        document.getElementById(
+            "team-profile"
+        );
 
-    profile.style.display = "block";
+    profile.style.display =
+        "block";
 
-    document.getElementById("profile-roster").innerHTML =
+
+    document.getElementById(
+        "profile-roster"
+    ).innerHTML =
         '<div class="loading">Loading roster...</div>';
 
+
     profile.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
+        behavior: "smooth",
+        block: "start"
     });
 
 
     try {
 
         if (!NFL_PLAYERS) {
+
             NFL_PLAYERS =
-                await sleeper("/players/nfl");
+                await sleeper(
+                    "/players/nfl"
+                );
         }
 
 
         const starters =
-            new Set(roster.starters || []);
+            new Set(
+                roster.starters || []
+            );
 
 
         const players =
             playerIds.map(function(id) {
 
-                const player = NFL_PLAYERS[id];
+                const player =
+                    NFL_PLAYERS[id];
+
 
                 if (!player) {
+
                     return {
-                        name:"Player " + id,
-                        position:"?",
-                        team:"",
-                        starter:starters.has(id)
+                        name:
+                            "Player " + id,
+                        position:
+                            "?",
+                        team:
+                            "",
+                        starter:
+                            starters.has(id)
                     };
                 }
 
 
                 return {
+
                     name:
                         player.full_name ||
                         (
@@ -1427,13 +1553,18 @@ async function openTeamProfile(rosterId) {
                 return a.starter ? -1 : 1;
             }
 
-            return (a.position || "")
-                .localeCompare(b.position || "");
+            return (
+                a.position || ""
+            ).localeCompare(
+                b.position || ""
+            );
         });
 
 
         const list =
-            document.getElementById("profile-roster");
+            document.getElementById(
+                "profile-roster"
+            );
 
         list.innerHTML = "";
 
@@ -1443,7 +1574,9 @@ async function openTeamProfile(rosterId) {
             const row =
                 document.createElement("div");
 
-            row.className = "player-row";
+            row.className =
+                "player-row";
+
 
             row.innerHTML =
 
@@ -1460,8 +1593,13 @@ async function openTeamProfile(rosterId) {
                 '</div>' +
 
                 '<div class="starter-badge">' +
-                (player.starter ? "STARTER" : "") +
+                (
+                    player.starter
+                    ? "STARTER"
+                    : ""
+                ) +
                 '</div>';
+
 
             list.appendChild(row);
         });
@@ -1471,7 +1609,9 @@ async function openTeamProfile(rosterId) {
 
         console.error(error);
 
-        document.getElementById("profile-roster").innerHTML =
+        document.getElementById(
+            "profile-roster"
+        ).innerHTML =
             '<div class="error">Couldn\'t load player names.</div>';
     }
 }
@@ -1479,68 +1619,87 @@ async function openTeamProfile(rosterId) {
 
 function closeTeamProfile() {
 
-    document.getElementById("team-profile")
-        .style.display = "none";
+    document.getElementById(
+        "team-profile"
+    ).style.display =
+        "none";
 }
 
 
 /* AWARDS */
 
-function awardCard(icon,title,team,detail,subtext) {
+function awardCard(
+    icon,
+    title,
+    team,
+    detail,
+    subtext
+) {
 
     return (
         '<div class="award-card">' +
-            '<div class="award-icon">' + icon + '</div>' +
-            '<div class="award-title">' + title + '</div>' +
-            '<div class="award-team">' + team + '</div>' +
-            '<div class="award-detail">' + detail + '</div>' +
-            '<div class="award-subtext">' + subtext + '</div>' +
+            '<div class="award-icon">' +
+            icon +
+            '</div>' +
+            '<div class="award-title">' +
+            title +
+            '</div>' +
+            '<div class="award-team">' +
+            team +
+            '</div>' +
+            '<div class="award-detail">' +
+            detail +
+            '</div>' +
+            '<div class="award-subtext">' +
+            subtext +
+            '</div>' +
         '</div>'
     );
 }
 
 
-function renderAwards(games,week) {
+function renderAwards(
+    games,
+    week
+) {
 
     const grid =
-        document.getElementById("awards-grid");
+        document.getElementById(
+            "awards-grid"
+        );
 
-    document.getElementById("awards-week").textContent =
+
+    document.getElementById(
+        "awards-week"
+    ).textContent =
         "WEEK " + week;
 
 
     const teams = [];
 
+
     games.forEach(function(game) {
 
         teams.push({
-            name:game.teamOne.name,
-            score:game.scoreOne
+            name:
+                game.teamOne.name,
+            score:
+                game.scoreOne
         });
 
         teams.push({
-            name:game.teamTwo.name,
-            score:game.scoreTwo
+            name:
+                game.teamTwo.name,
+            score:
+                game.scoreTwo
         });
     });
 
 
-    const scoringStarted =
-        teams.some(function(team) {
-            return team.score > 0;
-        });
-
-
-    if (!games.length || !scoringStarted) {
+    if (!teams.length) {
 
         grid.innerHTML =
-            '<div class="league-card" style="grid-column:1/-1;">' +
-            '<strong>Week ' +
-            week +
-            ' awards are waiting for kickoff.</strong>' +
-            '<p style="color:#8b949e;margin-bottom:0;">' +
-            'Once points start hitting the board, the Fart Den will begin handing out honors and public humiliation.' +
-            '</p></div>';
+            '<div class="loading">No completed matchup data yet.</div>';
 
         return;
     }
@@ -1551,6 +1710,7 @@ function renderAwards(games,week) {
             return b.score > a.score ? b : a;
         });
 
+
     const lowest =
         teams.reduce(function(a,b) {
             return b.score < a.score ? b : a;
@@ -1559,8 +1719,9 @@ function renderAwards(games,week) {
 
     const margins =
         games.map(function(game) {
+
             return {
-                game:game,
+                game: game,
                 margin:
                     Math.abs(
                         game.scoreOne -
@@ -1575,6 +1736,7 @@ function renderAwards(games,week) {
             return b.margin > a.margin ? b : a;
         });
 
+
     const closest =
         margins.reduce(function(a,b) {
             return b.margin < a.margin ? b : a;
@@ -1582,15 +1744,32 @@ function renderAwards(games,week) {
 
 
     function winner(game) {
-        return game.scoreOne > game.scoreTwo
-            ? game.teamOne.name
-            : game.teamTwo.name;
+
+        if (game.scoreOne === game.scoreTwo) {
+            return "Tie";
+        }
+
+        return (
+            game.scoreOne >
+            game.scoreTwo
+        )
+        ? game.teamOne.name
+        : game.teamTwo.name;
     }
 
+
     function loser(game) {
-        return game.scoreOne > game.scoreTwo
-            ? game.teamTwo.name
-            : game.teamOne.name;
+
+        if (game.scoreOne === game.scoreTwo) {
+            return "Nobody";
+        }
+
+        return (
+            game.scoreOne >
+            game.scoreTwo
+        )
+        ? game.teamTwo.name
+        : game.teamOne.name;
     }
 
 
@@ -1600,8 +1779,10 @@ function renderAwards(games,week) {
             "👑",
             "King of the Fart Den",
             highest.name,
-            highest.score.toFixed(2) + " points",
-            "Highest score of the week"
+            highest.score.toFixed(2) +
+            " points",
+            "Highest score of Week " +
+            week
         )
 
         +
@@ -1610,8 +1791,10 @@ function renderAwards(games,week) {
             "💩",
             "Basement Dweller",
             lowest.name,
-            lowest.score.toFixed(2) + " points",
-            "Someone had to finish last"
+            lowest.score.toFixed(2) +
+            " points",
+            "Absolute bottom of Week " +
+            week
         )
 
         +
@@ -1620,8 +1803,10 @@ function renderAwards(games,week) {
             "🔨",
             "Ass Whooping of the Week",
             winner(biggest.game),
-            "Won by " + biggest.margin.toFixed(2),
-            "Victim: " + loser(biggest.game)
+            "Won by " +
+            biggest.margin.toFixed(2),
+            "Victim: " +
+            loser(biggest.game)
         )
 
         +
@@ -1630,135 +1815,74 @@ function renderAwards(games,week) {
             "😬",
             "Heartbreaker",
             loser(closest.game),
-            "Lost by " + closest.margin.toFixed(2),
-            "Winner: " + winner(closest.game)
+            "Lost by " +
+            closest.margin.toFixed(2),
+            "Winner: " +
+            winner(closest.game)
         );
 }
 
 
-/* MATCHUPS */
+/* CURRENT WEEK MATCHUPS */
 
-async function renderMatchups() {
+function renderCurrentMatchups(
+    matchups,
+    week
+) {
 
-    const state =
-        await sleeper("/state/nfl");
-
-    const week =
-        Number(state.week);
-
-
-    document.getElementById("week-label").textContent =
-        "WEEK " + week;
-
-
-    const matchups =
-        await sleeper(
-            "/league/" +
-            LEAGUE_ID +
-            "/matchups/" +
-            week
-        );
-
-
-    const rostersById = {};
-
-    GLOBAL_ROSTERS.forEach(function(roster) {
-        rostersById[roster.roster_id] = roster;
-    });
-
-
-    const grouped = {};
-
-    CURRENT_WEEK_SCORES = {};
-
-
-    matchups.forEach(function(matchup) {
-
-        CURRENT_WEEK_SCORES[
-            matchup.roster_id
-        ] = Number(matchup.points || 0);
-
-
-        const id = matchup.matchup_id;
-
-        if (id === null || id === undefined) {
-            return;
-        }
-
-        if (!grouped[id]) {
-            grouped[id] = [];
-        }
-
-        grouped[id].push(matchup);
-    });
+    const games =
+        buildGames(matchups);
 
 
     const grid =
-        document.getElementById("matchups-grid");
+        document.getElementById(
+            "matchups-grid"
+        );
+
+
+    document.getElementById(
+        "week-label"
+    ).textContent =
+        "WEEK " + week;
+
 
     grid.innerHTML = "";
 
 
-    const ids =
-        Object.keys(grouped).sort(function(a,b) {
-            return Number(a) - Number(b);
-        });
+    if (!games.length) {
+
+        grid.innerHTML =
+            '<div class="loading">No Week ' +
+            week +
+            ' matchups available.</div>';
+
+        return;
+    }
 
 
-    const games = [];
-
-
-    ids.forEach(function(id) {
-
-        const game = grouped[id];
-
-        if (game.length !== 2) return;
-
-
-        const first = game[0];
-        const second = game[1];
-
-        const rosterOne =
-            rostersById[first.roster_id];
-
-        const rosterTwo =
-            rostersById[second.roster_id];
-
-        if (!rosterOne || !rosterTwo) return;
-
-
-        const teamOne =
-            getTeamInfo(rosterOne);
-
-        const teamTwo =
-            getTeamInfo(rosterTwo);
-
-        const scoreOne =
-            Number(first.points || 0);
-
-        const scoreTwo =
-            Number(second.points || 0);
-
-
-        games.push({
-            teamOne:teamOne,
-            teamTwo:teamTwo,
-            scoreOne:scoreOne,
-            scoreTwo:scoreTwo
-        });
-
+    games.forEach(function(game) {
 
         const card =
             document.createElement("div");
 
-        card.className = "matchup-card";
+        card.className =
+            "matchup-card";
 
 
-        function teamRow(team,score,leading) {
+        function teamRow(
+            team,
+            score,
+            leading
+        ) {
 
             return (
+
                 '<div class="matchup-team ' +
-                (leading ? 'leading' : '') +
+                (
+                    leading
+                    ? 'leading'
+                    : ''
+                ) +
                 '">' +
 
                     avatarHTML(
@@ -1790,31 +1914,190 @@ async function renderMatchups() {
         card.innerHTML =
 
             teamRow(
-                teamOne,
-                scoreOne,
-                scoreOne > scoreTwo
+                game.teamOne,
+                game.scoreOne,
+                game.scoreOne >
+                game.scoreTwo
             )
 
             +
 
             teamRow(
-                teamTwo,
-                scoreTwo,
-                scoreTwo > scoreOne
+                game.teamTwo,
+                game.scoreTwo,
+                game.scoreTwo >
+                game.scoreOne
             );
 
 
         grid.appendChild(card);
     });
+}
 
 
-    renderAwards(games,week);
+/* FIND LATEST COMPLETED WEEK */
+
+async function loadWeeklyData() {
+
+    const state =
+        await sleeper(
+            "/state/nfl"
+        );
+
+
+    CURRENT_WEEK =
+        Math.max(
+            1,
+            Number(state.week || 1)
+        );
+
+
+    const currentMatchups =
+        await sleeper(
+            "/league/" +
+            LEAGUE_ID +
+            "/matchups/" +
+            CURRENT_WEEK
+        );
+
+
+    renderCurrentMatchups(
+        currentMatchups,
+        CURRENT_WEEK
+    );
+
+
+    /*
+       Sleeper's current week can already exist
+       before games are actually finished.
+
+       For awards/rankings, start with the
+       previous week and move backward until
+       we find real scoring data.
+    */
+
+    let candidateWeek =
+        Math.max(
+            1,
+            CURRENT_WEEK - 1
+        );
+
+
+    let completedMatchups =
+        [];
+
+
+    while (candidateWeek >= 1) {
+
+        const data =
+            await sleeper(
+                "/league/" +
+                LEAGUE_ID +
+                "/matchups/" +
+                candidateWeek
+            );
+
+
+        const hasRealScores =
+            data.some(function(matchup) {
+
+                return (
+                    Number(
+                        matchup.points || 0
+                    ) > 0
+                );
+            });
+
+
+        if (hasRealScores) {
+
+            completedMatchups =
+                data;
+
+            break;
+        }
+
+
+        candidateWeek--;
+    }
+
+
+    /*
+       If the current week itself has meaningful
+       scoring and the previous-week search found
+       nothing, use current week. Otherwise the
+       awards stay on the latest completed week.
+    */
+
+    if (
+        completedMatchups.length === 0
+    ) {
+
+        const currentHasScores =
+            currentMatchups.some(
+                function(matchup) {
+
+                    return (
+                        Number(
+                            matchup.points || 0
+                        ) > 0
+                    );
+                }
+            );
+
+
+        if (currentHasScores) {
+
+            candidateWeek =
+                CURRENT_WEEK;
+
+            completedMatchups =
+                currentMatchups;
+        }
+    }
+
+
+    LATEST_COMPLETED_WEEK =
+        Math.max(
+            1,
+            candidateWeek
+        );
+
+
+    LATEST_COMPLETED_SCORES =
+        {};
+
+
+    completedMatchups.forEach(
+        function(matchup) {
+
+            LATEST_COMPLETED_SCORES[
+                matchup.roster_id
+            ] =
+                Number(
+                    matchup.points || 0
+                );
+        }
+    );
+
+
+    const completedGames =
+        buildGames(
+            completedMatchups
+        );
+
+
+    renderAwards(
+        completedGames,
+        LATEST_COMPLETED_WEEK
+    );
+
 
     renderPowerRankings();
 }
 
 
-/* LOAD */
+/* LOAD EVERYTHING */
 
 async function loadSite() {
 
@@ -1843,40 +2126,64 @@ async function loadSite() {
             ]);
 
 
-        const league = results[0];
-        const users = results[1];
+        const league =
+            results[0];
 
-        GLOBAL_ROSTERS = results[2];
+        const users =
+            results[1];
 
-        GLOBAL_USERS_BY_ID = {};
+        GLOBAL_ROSTERS =
+            results[2];
+
+
+        GLOBAL_USERS_BY_ID =
+            {};
 
 
         users.forEach(function(user) {
+
             GLOBAL_USERS_BY_ID[
                 user.user_id
             ] = user;
         });
 
 
-        document.getElementById("league-name").textContent =
+        document.getElementById(
+            "league-name"
+        ).textContent =
+
             league.name ||
             "Fantasy Football League";
 
 
-        document.getElementById("league-details").textContent =
+        document.getElementById(
+            "league-details"
+        ).textContent =
+
             league.season +
             " Season • " +
             league.total_rosters +
             " Teams";
 
 
-        document.getElementById("connection-status").innerHTML =
-            '<span class="status">✓ LIVE SLEEPER DATA</span>';
+        document.getElementById(
+            "connection-status"
+        ).innerHTML =
+
+            '<span class="status">' +
+            '✓ LIVE SLEEPER DATA' +
+            '</span>';
 
 
-        document.getElementById("league-summary").textContent =
+        document.getElementById(
+            "league-summary"
+        ).textContent =
+
             "League status: " +
-            (league.status || "Unknown");
+            (
+                league.status ||
+                "Unknown"
+            );
 
 
         renderStandings();
@@ -1886,17 +2193,41 @@ async function loadSite() {
 
         try {
 
-            await renderMatchups();
+            await loadWeeklyData();
 
         } catch(error) {
 
-            console.error(error);
+            console.error(
+                "Weekly data error:",
+                error
+            );
 
-            document.getElementById("matchups-grid").innerHTML =
-                '<div class="error">Couldn\'t load matchups.</div>';
 
-            document.getElementById("power-list").innerHTML =
-                '<div class="error">Couldn\'t calculate power rankings.</div>';
+            document.getElementById(
+                "matchups-grid"
+            ).innerHTML =
+
+                '<div class="error">' +
+                "Couldn't load weekly matchups." +
+                '</div>';
+
+
+            document.getElementById(
+                "awards-grid"
+            ).innerHTML =
+
+                '<div class="error">' +
+                "Couldn't calculate weekly awards." +
+                '</div>';
+
+
+            document.getElementById(
+                "power-list"
+            ).innerHTML =
+
+                '<div class="error">' +
+                "Couldn't calculate power rankings." +
+                '</div>';
         }
 
 
@@ -1904,8 +2235,14 @@ async function loadSite() {
 
         console.error(error);
 
-        document.getElementById("connection-status").innerHTML =
-            '<span class="error">Unable to connect to Sleeper.</span>';
+
+        document.getElementById(
+            "connection-status"
+        ).innerHTML =
+
+            '<span class="error">' +
+            'Unable to connect to Sleeper.' +
+            '</span>';
     }
 }
 
