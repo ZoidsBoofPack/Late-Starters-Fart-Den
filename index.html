@@ -7,13 +7,9 @@
 <title>Late Starters Fart Den</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html {
-    scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
     margin: 0;
@@ -45,7 +41,7 @@ nav {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(9, 12, 16, 0.96);
+    background: rgba(9,12,16,.96);
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -60,18 +56,14 @@ nav a {
     font-weight: bold;
 }
 
-nav a:hover {
-    color: #4ade80;
-}
+nav a:hover { color: #4ade80; }
 
 main {
     width: min(1100px, 92%);
     margin: 35px auto;
 }
 
-.section {
-    margin-bottom: 48px;
-}
+.section { margin-bottom: 48px; }
 
 .section-title {
     margin: 0 0 15px;
@@ -108,16 +100,14 @@ main {
     padding: 20px;
 }
 
-.error {
-    color: #f87171;
-}
+.error { color: #f87171; }
 
 
 /* AWARDS */
 
 .awards-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4,1fr);
     gap: 14px;
 }
 
@@ -139,14 +129,12 @@ main {
     font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: .5px;
     margin-bottom: 9px;
 }
 
 .award-team {
     font-size: 18px;
     font-weight: bold;
-    line-height: 1.25;
 }
 
 .award-detail {
@@ -167,7 +155,7 @@ main {
 
 .matchups-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2,1fr);
     gap: 15px;
 }
 
@@ -202,9 +190,7 @@ main {
     object-fit: cover;
 }
 
-.matchup-name {
-    font-weight: bold;
-}
+.matchup-name { font-weight: bold; }
 
 .matchup-manager {
     color: #8b949e;
@@ -239,9 +225,7 @@ main {
     border-bottom: 1px solid #30363d;
 }
 
-.standings-row:last-child {
-    border-bottom: none;
-}
+.standings-row:last-child { border-bottom: none; }
 
 .standings-header {
     background: #21262d;
@@ -270,9 +254,7 @@ main {
     object-fit: cover;
 }
 
-.team-name {
-    font-weight: bold;
-}
+.team-name { font-weight: bold; }
 
 .manager {
     color: #8b949e;
@@ -280,12 +262,86 @@ main {
     margin-top: 3px;
 }
 
-.record {
+.record { font-weight: bold; }
+
+.points { text-align: right; }
+
+
+/* POWER RANKINGS */
+
+.power-list {
+    display: grid;
+    gap: 13px;
+}
+
+.power-card {
+    display: grid;
+    grid-template-columns: 70px 55px 1fr 160px;
+    align-items: center;
+    gap: 15px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.power-card.top-three {
+    border-color: #4ade80;
+}
+
+.power-rank {
+    font-size: 28px;
+    font-weight: 900;
+    color: #4ade80;
+    text-align: center;
+}
+
+.power-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #30363d;
+    object-fit: cover;
+}
+
+.power-name {
+    font-size: 18px;
     font-weight: bold;
 }
 
-.points {
+.power-manager {
+    color: #8b949e;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.power-roast {
+    margin-top: 9px;
+    color: #d1d5db;
+    line-height: 1.45;
+    font-size: 14px;
+}
+
+.power-stats {
     text-align: right;
+}
+
+.power-score {
+    color: #4ade80;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.power-score-label {
+    color: #8b949e;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.power-mini {
+    color: #9ca3af;
+    font-size: 12px;
+    margin-top: 6px;
 }
 
 
@@ -293,7 +349,7 @@ main {
 
 .teams-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3,1fr);
     gap: 15px;
 }
 
@@ -461,12 +517,9 @@ main {
     border-bottom: 1px solid #30363d;
 }
 
-.player-row:last-child {
-    border-bottom: none;
-}
+.player-row:last-child { border-bottom: none; }
 
 .player-position {
-    display: inline-block;
     text-align: center;
     background: #21262d;
     border-radius: 6px;
@@ -475,9 +528,7 @@ main {
     font-weight: bold;
 }
 
-.player-name {
-    font-weight: bold;
-}
+.player-name { font-weight: bold; }
 
 .player-team {
     color: #8b949e;
@@ -499,25 +550,25 @@ footer {
 }
 
 
-@media (max-width: 900px) {
-    .awards-grid {
-        grid-template-columns: repeat(2,1fr);
+@media (max-width:900px) {
+    .awards-grid { grid-template-columns: repeat(2,1fr); }
+    .teams-grid { grid-template-columns: repeat(2,1fr); }
+
+    .power-card {
+        grid-template-columns: 55px 50px 1fr;
     }
 
-    .teams-grid {
-        grid-template-columns: repeat(2,1fr);
-    }
-}
-
-
-@media (max-width: 750px) {
-    .matchups-grid {
-        grid-template-columns: 1fr;
+    .power-stats {
+        grid-column: 3;
+        text-align: left;
     }
 }
 
+@media (max-width:750px) {
+    .matchups-grid { grid-template-columns: 1fr; }
+}
 
-@media (max-width: 650px) {
+@media (max-width:650px) {
 
     .awards-grid,
     .teams-grid {
@@ -534,30 +585,33 @@ footer {
         height: 34px;
     }
 
-    .profile-header {
-        align-items: flex-start;
+    .power-card {
+        grid-template-columns: 42px 42px 1fr;
+        padding: 14px;
+        gap: 10px;
     }
+
+    .power-rank { font-size: 22px; }
+
+    .power-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .power-name { font-size: 16px; }
 
     .profile-avatar {
         width: 55px;
         height: 55px;
     }
 
-    .profile-name {
-        font-size: 19px;
-    }
-
     .player-row {
         grid-template-columns: 45px 1fr 50px;
     }
 
-    .starter-badge {
-        display: none;
-    }
+    .starter-badge { display:none; }
 
-    nav {
-        gap: 15px;
-    }
+    nav { gap:15px; }
 }
 </style>
 </head>
@@ -574,9 +628,8 @@ footer {
     <a href="#awards">Awards</a>
     <a href="#matchups">Matchups</a>
     <a href="#standings">Standings</a>
+    <a href="#power">Power Rankings</a>
     <a href="#teams">Teams</a>
-    <a href="#">Power Rankings</a>
-    <a href="#">History</a>
 </nav>
 
 <main>
@@ -585,13 +638,8 @@ footer {
     <h2 class="section-title">League Headquarters</h2>
 
     <div class="league-card">
-        <p id="connection-status">
-            Connecting to Sleeper...
-        </p>
-
-        <p id="league-summary">
-            Loading league information...
-        </p>
+        <p id="connection-status">Connecting to Sleeper...</p>
+        <p id="league-summary">Loading league information...</p>
     </div>
 </section>
 
@@ -599,17 +647,12 @@ footer {
 <section class="section" id="awards">
 
     <div class="section-heading">
-        <h2 class="section-title">
-            🏅 Weekly Fart Den Awards
-        </h2>
-
+        <h2 class="section-title">🏅 Weekly Fart Den Awards</h2>
         <span id="awards-week" class="week-label"></span>
     </div>
 
     <div id="awards-grid" class="awards-grid">
-        <div class="loading">
-            Calculating this week's nonsense...
-        </div>
+        <div class="loading">Calculating this week's nonsense...</div>
     </div>
 
 </section>
@@ -618,17 +661,12 @@ footer {
 <section class="section" id="matchups">
 
     <div class="section-heading">
-        <h2 class="section-title">
-            🏈 This Week
-        </h2>
-
+        <h2 class="section-title">🏈 This Week</h2>
         <span id="week-label" class="week-label"></span>
     </div>
 
     <div id="matchups-grid" class="matchups-grid">
-        <div class="loading">
-            Loading matchups...
-        </div>
+        <div class="loading">Loading matchups...</div>
     </div>
 
 </section>
@@ -636,9 +674,7 @@ footer {
 
 <section class="section" id="standings">
 
-    <h2 class="section-title">
-        🏆 Standings
-    </h2>
+    <h2 class="section-title">🏆 Standings</h2>
 
     <div class="standings">
 
@@ -650,9 +686,7 @@ footer {
         </div>
 
         <div id="standings-body">
-            <div class="loading">
-                Loading standings...
-            </div>
+            <div class="loading">Loading standings...</div>
         </div>
 
     </div>
@@ -660,18 +694,29 @@ footer {
 </section>
 
 
-<section class="section" id="teams">
+<section class="section" id="power">
 
-    <h2 class="section-title">
-        🏟️ The Franchises
-    </h2>
+    <div class="section-heading">
+        <h2 class="section-title">⚡ Fart Den Power Rankings</h2>
+        <span class="week-label">NO FEELINGS. JUST NUMBERS.</span>
+    </div>
 
-    <div id="teams-grid" class="teams-grid">
+    <div id="power-list" class="power-list">
         <div class="loading">
-            Loading teams...
+            Judging everyone's terrible decisions...
         </div>
     </div>
 
+</section>
+
+
+<section class="section" id="teams">
+
+    <h2 class="section-title">🏟️ The Franchises</h2>
+
+    <div id="teams-grid" class="teams-grid">
+        <div class="loading">Loading teams...</div>
+    </div>
 
     <div id="team-profile" class="team-profile">
 
@@ -688,14 +733,11 @@ footer {
 
             </div>
 
-            <button
-                class="close-profile"
-                onclick="closeTeamProfile()">
+            <button class="close-profile" onclick="closeTeamProfile()">
                 Close
             </button>
 
         </div>
-
 
         <div class="profile-stats">
 
@@ -716,15 +758,10 @@ footer {
 
         </div>
 
-
-        <h3 class="roster-title">
-            Current Roster
-        </h3>
+        <h3 class="roster-title">Current Roster</h3>
 
         <div id="profile-roster" class="roster-list">
-            <div class="loading">
-                Loading NFL players...
-            </div>
+            <div class="loading">Loading NFL players...</div>
         </div>
 
     </div>
@@ -732,7 +769,6 @@ footer {
 </section>
 
 </main>
-
 
 <footer>
     Late Starters Fart Den • Powered by Sleeper
@@ -747,18 +783,15 @@ const API = "https://api.sleeper.app/v1";
 let GLOBAL_ROSTERS = [];
 let GLOBAL_USERS_BY_ID = {};
 let NFL_PLAYERS = null;
+let CURRENT_WEEK_SCORES = {};
 
 
 async function sleeper(endpoint) {
 
-    const response =
-        await fetch(API + endpoint);
+    const response = await fetch(API + endpoint);
 
     if (!response.ok) {
-        throw new Error(
-            "Sleeper API error: " +
-            response.status
-        );
+        throw new Error("Sleeper API error: " + response.status);
     }
 
     return response.json();
@@ -778,43 +811,28 @@ function getPointsFor(settings) {
 
 function getAvatar(user) {
 
-    if (!user || !user.avatar) {
-        return "";
-    }
+    if (!user || !user.avatar) return "";
 
-    return (
-        "https://sleepercdn.com/avatars/thumbs/" +
-        user.avatar
-    );
+    return "https://sleepercdn.com/avatars/thumbs/" + user.avatar;
 }
 
 
 function getTeamInfo(roster) {
 
     const owner =
-        GLOBAL_USERS_BY_ID[
-            roster.owner_id
-        ] || {};
+        GLOBAL_USERS_BY_ID[roster.owner_id] || {};
 
     return {
-
         name:
-            (
-                owner.metadata &&
-                owner.metadata.team_name
-            )
-            ||
-            owner.display_name
-            ||
-            "Team " + roster.roster_id,
+            (owner.metadata && owner.metadata.team_name)
+            || owner.display_name
+            || "Team " + roster.roster_id,
 
         manager:
-            owner.display_name ||
-            "Unknown Manager",
+            owner.display_name || "Unknown Manager",
 
         avatar:
             getAvatar(owner)
-
     };
 }
 
@@ -822,25 +840,16 @@ function getTeamInfo(roster) {
 function avatarHTML(url,className) {
 
     if (!url) {
-        return '<div class="' +
-            className +
-            '"></div>';
+        return '<div class="' + className + '"></div>';
     }
 
-    return (
-        '<img class="' +
-        className +
-        '" src="' +
-        url +
-        '" alt="">'
-    );
+    return '<img class="' + className + '" src="' + url + '" alt="">';
 }
 
 
 function rosterRecord(roster) {
 
-    const settings =
-        roster.settings || {};
+    const settings = roster.settings || {};
 
     let record =
         Number(settings.wins || 0) +
@@ -848,9 +857,7 @@ function rosterRecord(roster) {
         Number(settings.losses || 0);
 
     if (Number(settings.ties || 0) > 0) {
-        record +=
-            "-" +
-            Number(settings.ties);
+        record += "-" + Number(settings.ties);
     }
 
     return record;
@@ -862,105 +869,387 @@ function rosterRecord(roster) {
 function renderStandings() {
 
     const standings =
-        GLOBAL_ROSTERS.map(
-            function(roster) {
+        GLOBAL_ROSTERS.map(function(roster) {
 
-                const team =
-                    getTeamInfo(roster);
+            const team = getTeamInfo(roster);
 
-                return {
-                    roster: roster,
-                    team: team,
-                    wins: Number(
-                        roster.settings &&
-                        roster.settings.wins || 0
-                    ),
-                    pointsFor:
-                        getPointsFor(
-                            roster.settings
-                        )
-                };
-
-            }
-        );
+            return {
+                roster: roster,
+                team: team,
+                wins: Number(roster.settings && roster.settings.wins || 0),
+                pointsFor: getPointsFor(roster.settings)
+            };
+        });
 
 
-    standings.sort(
-        function(a,b) {
+    standings.sort(function(a,b) {
 
-            if (b.wins !== a.wins) {
-                return b.wins - a.wins;
-            }
-
-            return (
-                b.pointsFor -
-                a.pointsFor
-            );
+        if (b.wins !== a.wins) {
+            return b.wins - a.wins;
         }
-    );
+
+        return b.pointsFor - a.pointsFor;
+    });
 
 
     const body =
-        document.getElementById(
-            "standings-body"
-        );
+        document.getElementById("standings-body");
 
     body.innerHTML = "";
 
 
-    standings.forEach(
-        function(item,index) {
+    standings.forEach(function(item,index) {
 
-            const row =
-                document.createElement(
-                    "div"
-                );
+        const row = document.createElement("div");
 
-            row.className =
-                "standings-row";
+        row.className = "standings-row";
 
-            row.innerHTML =
+        row.innerHTML =
 
-                '<div class="rank">' +
-                (index + 1) +
-                '</div>' +
+            '<div class="rank">' +
+            (index + 1) +
+            '</div>' +
 
-                '<div class="team">' +
+            '<div class="team">' +
 
-                    avatarHTML(
-                        item.team.avatar,
-                        "avatar"
-                    ) +
+                avatarHTML(item.team.avatar,"avatar") +
 
-                    '<div>' +
+                '<div>' +
 
-                        '<div class="team-name">' +
-                        item.team.name +
-                        '</div>' +
+                    '<div class="team-name">' +
+                    item.team.name +
+                    '</div>' +
 
-                        '<div class="manager">' +
-                        item.team.manager +
-                        '</div>' +
-
+                    '<div class="manager">' +
+                    item.team.manager +
                     '</div>' +
 
                 '</div>' +
 
-                '<div class="record">' +
-                rosterRecord(
-                    item.roster
-                ) +
+            '</div>' +
+
+            '<div class="record">' +
+            rosterRecord(item.roster) +
+            '</div>' +
+
+            '<div class="points">' +
+            item.pointsFor.toFixed(2) +
+            '</div>';
+
+        body.appendChild(row);
+    });
+}
+
+
+/* POWER RANKINGS */
+
+function getRoast(team,rank,totalTeams,averages) {
+
+    const winPct = team.winPct;
+    const pf = team.pf;
+    const weekly = team.weekScore;
+
+    const pfRatio =
+        averages.pf > 0
+        ? pf / averages.pf
+        : 1;
+
+    const recordRatio =
+        averages.winPct > 0
+        ? winPct / averages.winPct
+        : 1;
+
+
+    if (rank === totalTeams) {
+
+        return "Dead last. No advanced metric, no excuse, no moral victory. This team just fucking sucks right now.";
+    }
+
+
+    if (
+        rank >= totalTeams - 2 &&
+        pfRatio < .9
+    ) {
+
+        return "The standings are ugly and the scoring is somehow worse. At this point the lineup is less of a strategy and more of a cry for help.";
+    }
+
+
+    if (
+        winPct >= .65 &&
+        pfRatio < .95
+    ) {
+
+        return "The record says contender. The points say this asshole has been getting away with murder. Enjoy it before the bullshit catches up.";
+    }
+
+
+    if (
+        winPct < .5 &&
+        pfRatio > 1.08
+    ) {
+
+        return "Scores enough points to win and still keeps eating shit. A genuinely impressive waste of production.";
+    }
+
+
+    if (
+        winPct >= .65 &&
+        pfRatio >= 1.08
+    ) {
+
+        return "Unfortunately, the numbers say this asshole is actually good. We checked twice.";
+    }
+
+
+    if (
+        rank <= 3 &&
+        weekly > averages.week * 1.1
+    ) {
+
+        return "Already near the top and still putting up stupid numbers. Somebody please beat this prick before the group chat becomes unbearable.";
+    }
+
+
+    if (
+        weekly > averages.week * 1.2
+    ) {
+
+        return "Apparently decided this was the week to stop fucking around. Huge score. We'll see if it lasts.";
+    }
+
+
+    if (
+        weekly > 0 &&
+        weekly < averages.week * .75
+    ) {
+
+        return "That weekly score belongs in evidence. Whatever the game plan was, burn it.";
+    }
+
+
+    if (
+        pfRatio > 1.08 &&
+        recordRatio < .95
+    ) {
+
+        return "The points are respectable. The record isn't. Congratulations on being good at fantasy football except for the part where you actually win.";
+    }
+
+
+    if (
+        pfRatio < .9 &&
+        recordRatio > 1.05
+    ) {
+
+        return "Good record. Suspicious point total. This operation has fraud written all over it.";
+    }
+
+
+    if (
+        rank >= 5 &&
+        rank <= 10
+    ) {
+
+        return "The definition of mid. Too good to laugh at every week, too shitty to take seriously.";
+    }
+
+
+    if (rank <= 4) {
+
+        return "Solid record, solid scoring, annoyingly few reasons to talk shit. For now.";
+    }
+
+
+    if (rank >= totalTeams - 4) {
+
+        return "One decent week away from talking an unbelievable amount of shit for a team that has accomplished absolutely nothing.";
+    }
+
+
+    return "Not a disaster. Not particularly scary either. Basically just occupying space in the standings.";
+}
+
+
+function renderPowerRankings() {
+
+    const list =
+        document.getElementById("power-list");
+
+
+    const teams =
+        GLOBAL_ROSTERS.map(function(roster) {
+
+            const settings = roster.settings || {};
+            const info = getTeamInfo(roster);
+
+            const wins = Number(settings.wins || 0);
+            const losses = Number(settings.losses || 0);
+            const ties = Number(settings.ties || 0);
+
+            const games = wins + losses + ties;
+
+            const winPct =
+                games > 0
+                ? (wins + ties * .5) / games
+                : 0;
+
+            const pf = getPointsFor(settings);
+
+            const weekScore =
+                Number(
+                    CURRENT_WEEK_SCORES[
+                        roster.roster_id
+                    ] || 0
+                );
+
+            return {
+                roster: roster,
+                info: info,
+                wins: wins,
+                losses: losses,
+                winPct: winPct,
+                pf: pf,
+                weekScore: weekScore
+            };
+        });
+
+
+    const maxPF =
+        Math.max(
+            ...teams.map(function(t) {
+                return t.pf;
+            }),
+            1
+        );
+
+
+    const maxWeek =
+        Math.max(
+            ...teams.map(function(t) {
+                return t.weekScore;
+            }),
+            1
+        );
+
+
+    teams.forEach(function(team) {
+
+        const recordScore =
+            team.winPct * 60;
+
+        const scoringScore =
+            (team.pf / maxPF) * 30;
+
+        const recentScore =
+            team.weekScore > 0
+            ? (team.weekScore / maxWeek) * 10
+            : 0;
+
+        team.powerScore =
+            recordScore +
+            scoringScore +
+            recentScore;
+    });
+
+
+    teams.sort(function(a,b) {
+        return b.powerScore - a.powerScore;
+    });
+
+
+    const averages = {
+
+        pf:
+            teams.reduce(function(sum,t) {
+                return sum + t.pf;
+            },0) / teams.length,
+
+        winPct:
+            teams.reduce(function(sum,t) {
+                return sum + t.winPct;
+            },0) / teams.length,
+
+        week:
+            teams.reduce(function(sum,t) {
+                return sum + t.weekScore;
+            },0) / teams.length
+    };
+
+
+    list.innerHTML = "";
+
+
+    teams.forEach(function(team,index) {
+
+        const rank = index + 1;
+
+        const roast =
+            getRoast(
+                team,
+                rank,
+                teams.length,
+                averages
+            );
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "power-card" +
+            (rank <= 3 ? " top-three" : "");
+
+
+        card.innerHTML =
+
+            '<div class="power-rank">#' +
+            rank +
+            '</div>' +
+
+            avatarHTML(
+                team.info.avatar,
+                "power-avatar"
+            ) +
+
+            '<div>' +
+
+                '<div class="power-name">' +
+                team.info.name +
                 '</div>' +
 
-                '<div class="points">' +
-                item.pointsFor.toFixed(2) +
-                '</div>';
+                '<div class="power-manager">' +
+                team.info.manager +
+                '</div>' +
+
+                '<div class="power-roast">' +
+                roast +
+                '</div>' +
+
+            '</div>' +
+
+            '<div class="power-stats">' +
+
+                '<div class="power-score">' +
+                team.powerScore.toFixed(1) +
+                '</div>' +
+
+                '<div class="power-score-label">' +
+                'Power Score' +
+                '</div>' +
+
+                '<div class="power-mini">' +
+                rosterRecord(team.roster) +
+                ' • ' +
+                team.pf.toFixed(2) +
+                ' PF' +
+                '</div>' +
+
+            '</div>';
 
 
-            body.appendChild(row);
-
-        }
-    );
+        list.appendChild(card);
+    });
 }
 
 
@@ -969,522 +1258,339 @@ function renderStandings() {
 function renderTeams() {
 
     const grid =
-        document.getElementById(
-            "teams-grid"
-        );
+        document.getElementById("teams-grid");
 
     grid.innerHTML = "";
 
 
-    GLOBAL_ROSTERS.forEach(
-        function(roster) {
+    GLOBAL_ROSTERS.forEach(function(roster) {
 
-            const team =
-                getTeamInfo(roster);
+        const team = getTeamInfo(roster);
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+        const card =
+            document.createElement("div");
 
-            card.className =
-                "team-card";
+        card.className = "team-card";
 
-
-            card.onclick =
-                function() {
-
-                    openTeamProfile(
-                        roster.roster_id
-                    );
-
-                };
+        card.onclick = function() {
+            openTeamProfile(roster.roster_id);
+        };
 
 
-            card.innerHTML =
+        card.innerHTML =
 
-                '<div class="team-card-top">' +
+            '<div class="team-card-top">' +
 
-                    avatarHTML(
-                        team.avatar,
-                        "team-card-avatar"
-                    ) +
+                avatarHTML(
+                    team.avatar,
+                    "team-card-avatar"
+                ) +
 
-                    '<div>' +
+                '<div>' +
 
-                        '<div class="team-card-name">' +
-                        team.name +
-                        '</div>' +
+                    '<div class="team-card-name">' +
+                    team.name +
+                    '</div>' +
 
-                        '<div class="team-card-manager">' +
-                        team.manager +
-                        '</div>' +
-
+                    '<div class="team-card-manager">' +
+                    team.manager +
                     '</div>' +
 
                 '</div>' +
 
-                '<div class="team-card-stats">' +
+            '</div>' +
 
-                    '<div>' +
-                        '<div class="team-stat-label">Record</div>' +
-                        '<div class="team-stat-value">' +
-                        rosterRecord(roster) +
-                        '</div>' +
+            '<div class="team-card-stats">' +
+
+                '<div>' +
+                    '<div class="team-stat-label">Record</div>' +
+                    '<div class="team-stat-value">' +
+                    rosterRecord(roster) +
                     '</div>' +
+                '</div>' +
 
-                    '<div>' +
-                        '<div class="team-stat-label">PF</div>' +
-                        '<div class="team-stat-value">' +
-                        getPointsFor(
-                            roster.settings
-                        ).toFixed(2) +
-                        '</div>' +
+                '<div>' +
+                    '<div class="team-stat-label">PF</div>' +
+                    '<div class="team-stat-value">' +
+                    getPointsFor(roster.settings).toFixed(2) +
                     '</div>' +
+                '</div>' +
 
-                '</div>';
+            '</div>';
 
-
-            grid.appendChild(card);
-
-        }
-    );
+        grid.appendChild(card);
+    });
 }
 
 
-async function openTeamProfile(
-    rosterId
-) {
+async function openTeamProfile(rosterId) {
 
     const roster =
-        GLOBAL_ROSTERS.find(
-            function(item) {
-                return (
-                    item.roster_id ===
-                    rosterId
-                );
-            }
-        );
+        GLOBAL_ROSTERS.find(function(item) {
+            return item.roster_id === rosterId;
+        });
 
-    if (!roster) {
-        return;
-    }
+    if (!roster) return;
 
 
-    const team =
-        getTeamInfo(roster);
+    const team = getTeamInfo(roster);
 
 
-    document.getElementById(
-        "profile-avatar-wrap"
-    ).innerHTML =
-        avatarHTML(
-            team.avatar,
-            "profile-avatar"
-        );
+    document.getElementById("profile-avatar-wrap").innerHTML =
+        avatarHTML(team.avatar,"profile-avatar");
 
-
-    document.getElementById(
-        "profile-name"
-    ).textContent =
+    document.getElementById("profile-name").textContent =
         team.name;
 
+    document.getElementById("profile-manager").textContent =
+        "Manager: " + team.manager;
 
-    document.getElementById(
-        "profile-manager"
-    ).textContent =
-        "Manager: " +
-        team.manager;
-
-
-    document.getElementById(
-        "profile-record"
-    ).textContent =
+    document.getElementById("profile-record").textContent =
         rosterRecord(roster);
 
-
-    document.getElementById(
-        "profile-pf"
-    ).textContent =
-        getPointsFor(
-            roster.settings
-        ).toFixed(2);
+    document.getElementById("profile-pf").textContent =
+        getPointsFor(roster.settings).toFixed(2);
 
 
-    const playerIds =
-        roster.players || [];
+    const playerIds = roster.players || [];
 
-
-    document.getElementById(
-        "profile-roster-count"
-    ).textContent =
+    document.getElementById("profile-roster-count").textContent =
         playerIds.length;
 
 
     const profile =
-        document.getElementById(
-            "team-profile"
-        );
+        document.getElementById("team-profile");
 
-    profile.style.display =
-        "block";
+    profile.style.display = "block";
 
-
-    document.getElementById(
-        "profile-roster"
-    ).innerHTML =
-        '<div class="loading">' +
-        'Loading roster...' +
-        '</div>';
-
+    document.getElementById("profile-roster").innerHTML =
+        '<div class="loading">Loading roster...</div>';
 
     profile.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+        behavior:"smooth",
+        block:"start"
     });
 
 
     try {
 
         if (!NFL_PLAYERS) {
-
             NFL_PLAYERS =
-                await sleeper(
-                    "/players/nfl"
-                );
-
+                await sleeper("/players/nfl");
         }
 
 
         const starters =
-            new Set(
-                roster.starters || []
-            );
+            new Set(roster.starters || []);
 
 
         const players =
-            playerIds.map(
-                function(id) {
+            playerIds.map(function(id) {
 
-                    const player =
-                        NFL_PLAYERS[id];
+                const player = NFL_PLAYERS[id];
 
-                    if (!player) {
-
-                        return {
-                            id: id,
-                            name: "Player " + id,
-                            position: "?",
-                            team: "",
-                            starter:
-                                starters.has(id)
-                        };
-
-                    }
-
-
+                if (!player) {
                     return {
-
-                        id: id,
-
-                        name:
-                            player.full_name
-                            ||
-                            (
-                                (
-                                    player.first_name
-                                    || ""
-                                )
-                                +
-                                " "
-                                +
-                                (
-                                    player.last_name
-                                    || ""
-                                )
-                            ).trim()
-                            ||
-                            "Unknown Player",
-
-                        position:
-                            player.position
-                            || "?",
-
-                        team:
-                            player.team
-                            || "FA",
-
-                        starter:
-                            starters.has(id)
-
+                        name:"Player " + id,
+                        position:"?",
+                        team:"",
+                        starter:starters.has(id)
                     };
-
-                }
-            );
-
-
-        players.sort(
-            function(a,b) {
-
-                if (
-                    a.starter !==
-                    b.starter
-                ) {
-
-                    return (
-                        a.starter
-                        ? -1
-                        : 1
-                    );
-
                 }
 
-                return (
-                    a.position || ""
-                ).localeCompare(
-                    b.position || ""
-                );
 
+                return {
+                    name:
+                        player.full_name ||
+                        (
+                            (player.first_name || "") +
+                            " " +
+                            (player.last_name || "")
+                        ).trim() ||
+                        "Unknown Player",
+
+                    position:
+                        player.position || "?",
+
+                    team:
+                        player.team || "FA",
+
+                    starter:
+                        starters.has(id)
+                };
+            });
+
+
+        players.sort(function(a,b) {
+
+            if (a.starter !== b.starter) {
+                return a.starter ? -1 : 1;
             }
-        );
+
+            return (a.position || "")
+                .localeCompare(b.position || "");
+        });
 
 
         const list =
-            document.getElementById(
-                "profile-roster"
-            );
+            document.getElementById("profile-roster");
 
         list.innerHTML = "";
 
 
-        players.forEach(
-            function(player) {
+        players.forEach(function(player) {
 
-                const row =
-                    document.createElement(
-                        "div"
-                    );
+            const row =
+                document.createElement("div");
 
-                row.className =
-                    "player-row";
+            row.className = "player-row";
 
+            row.innerHTML =
 
-                row.innerHTML =
+                '<div class="player-position">' +
+                player.position +
+                '</div>' +
 
-                    '<div class="player-position">' +
-                    player.position +
-                    '</div>' +
+                '<div class="player-name">' +
+                player.name +
+                '</div>' +
 
-                    '<div class="player-name">' +
-                    player.name +
-                    '</div>' +
+                '<div class="player-team">' +
+                player.team +
+                '</div>' +
 
-                    '<div class="player-team">' +
-                    player.team +
-                    '</div>' +
+                '<div class="starter-badge">' +
+                (player.starter ? "STARTER" : "") +
+                '</div>';
 
-                    '<div class="starter-badge">' +
-                    (
-                        player.starter
-                        ? "STARTER"
-                        : ""
-                    ) +
-                    '</div>';
+            list.appendChild(row);
+        });
 
 
-                list.appendChild(row);
-
-            }
-        );
-
-
-    } catch (error) {
+    } catch(error) {
 
         console.error(error);
 
-        document.getElementById(
-            "profile-roster"
-        ).innerHTML =
-
-            '<div class="error">' +
-            "Couldn't load player names." +
-            '</div>';
-
+        document.getElementById("profile-roster").innerHTML =
+            '<div class="error">Couldn\'t load player names.</div>';
     }
-
 }
 
 
 function closeTeamProfile() {
 
-    document.getElementById(
-        "team-profile"
-    ).style.display =
-        "none";
-
+    document.getElementById("team-profile")
+        .style.display = "none";
 }
 
 
 /* AWARDS */
 
-function renderAwards(
-    games,
-    week
-) {
+function awardCard(icon,title,team,detail,subtext) {
+
+    return (
+        '<div class="award-card">' +
+            '<div class="award-icon">' + icon + '</div>' +
+            '<div class="award-title">' + title + '</div>' +
+            '<div class="award-team">' + team + '</div>' +
+            '<div class="award-detail">' + detail + '</div>' +
+            '<div class="award-subtext">' + subtext + '</div>' +
+        '</div>'
+    );
+}
+
+
+function renderAwards(games,week) {
 
     const grid =
-        document.getElementById(
-            "awards-grid"
-        );
+        document.getElementById("awards-grid");
 
-    document.getElementById(
-        "awards-week"
-    ).textContent =
+    document.getElementById("awards-week").textContent =
         "WEEK " + week;
 
 
     const teams = [];
 
-    games.forEach(
-        function(game) {
+    games.forEach(function(game) {
 
-            teams.push({
-                name:
-                    game.teamOne.name,
-                score:
-                    game.scoreOne
-            });
+        teams.push({
+            name:game.teamOne.name,
+            score:game.scoreOne
+        });
 
-            teams.push({
-                name:
-                    game.teamTwo.name,
-                score:
-                    game.scoreTwo
-            });
-
-        }
-    );
+        teams.push({
+            name:game.teamTwo.name,
+            score:game.scoreTwo
+        });
+    });
 
 
     const scoringStarted =
-        teams.some(
-            function(team) {
-                return team.score > 0;
-            }
-        );
+        teams.some(function(team) {
+            return team.score > 0;
+        });
 
 
-    if (
-        !games.length ||
-        !scoringStarted
-    ) {
+    if (!games.length || !scoringStarted) {
 
         grid.innerHTML =
-
             '<div class="league-card" style="grid-column:1/-1;">' +
-
-            '<strong>' +
-            'Week ' +
+            '<strong>Week ' +
             week +
-            ' awards are waiting for kickoff.' +
-            '</strong>' +
-
+            ' awards are waiting for kickoff.</strong>' +
             '<p style="color:#8b949e;margin-bottom:0;">' +
             'Once points start hitting the board, the Fart Den will begin handing out honors and public humiliation.' +
-            '</p>' +
-
-            '</div>';
+            '</p></div>';
 
         return;
     }
 
 
     const highest =
-        teams.reduce(
-            function(a,b) {
-                return (
-                    b.score > a.score
-                    ? b
-                    : a
-                );
-            }
-        );
-
+        teams.reduce(function(a,b) {
+            return b.score > a.score ? b : a;
+        });
 
     const lowest =
-        teams.reduce(
-            function(a,b) {
-                return (
-                    b.score < a.score
-                    ? b
-                    : a
-                );
-            }
-        );
+        teams.reduce(function(a,b) {
+            return b.score < a.score ? b : a;
+        });
 
 
     const margins =
-        games.map(
-            function(game) {
-
-                return {
-                    game: game,
-                    margin:
-                        Math.abs(
-                            game.scoreOne -
-                            game.scoreTwo
-                        )
-                };
-
-            }
-        );
+        games.map(function(game) {
+            return {
+                game:game,
+                margin:
+                    Math.abs(
+                        game.scoreOne -
+                        game.scoreTwo
+                    )
+            };
+        });
 
 
     const biggest =
-        margins.reduce(
-            function(a,b) {
-                return (
-                    b.margin > a.margin
-                    ? b
-                    : a
-                );
-            }
-        );
-
+        margins.reduce(function(a,b) {
+            return b.margin > a.margin ? b : a;
+        });
 
     const closest =
-        margins.reduce(
-            function(a,b) {
-                return (
-                    b.margin < a.margin
-                    ? b
-                    : a
-                );
-            }
-        );
+        margins.reduce(function(a,b) {
+            return b.margin < a.margin ? b : a;
+        });
 
 
     function winner(game) {
-
-        return (
-            game.scoreOne >
-            game.scoreTwo
-        )
-        ? game.teamOne.name
-        : game.teamTwo.name;
-
+        return game.scoreOne > game.scoreTwo
+            ? game.teamOne.name
+            : game.teamTwo.name;
     }
 
-
     function loser(game) {
-
-        return (
-            game.scoreOne >
-            game.scoreTwo
-        )
-        ? game.teamTwo.name
-        : game.teamOne.name;
-
+        return game.scoreOne > game.scoreTwo
+            ? game.teamTwo.name
+            : game.teamOne.name;
     }
 
 
@@ -1494,8 +1600,7 @@ function renderAwards(
             "👑",
             "King of the Fart Den",
             highest.name,
-            highest.score.toFixed(2) +
-            " points",
+            highest.score.toFixed(2) + " points",
             "Highest score of the week"
         )
 
@@ -1505,8 +1610,7 @@ function renderAwards(
             "💩",
             "Basement Dweller",
             lowest.name,
-            lowest.score.toFixed(2) +
-            " points",
+            lowest.score.toFixed(2) + " points",
             "Someone had to finish last"
         )
 
@@ -1516,10 +1620,8 @@ function renderAwards(
             "🔨",
             "Ass Whooping of the Week",
             winner(biggest.game),
-            "Won by " +
-            biggest.margin.toFixed(2),
-            "Victim: " +
-            loser(biggest.game)
+            "Won by " + biggest.margin.toFixed(2),
+            "Victim: " + loser(biggest.game)
         )
 
         +
@@ -1528,51 +1630,9 @@ function renderAwards(
             "😬",
             "Heartbreaker",
             loser(closest.game),
-            "Lost by " +
-            closest.margin.toFixed(2),
-            "Winner: " +
-            winner(closest.game)
+            "Lost by " + closest.margin.toFixed(2),
+            "Winner: " + winner(closest.game)
         );
-
-}
-
-
-function awardCard(
-    icon,
-    title,
-    team,
-    detail,
-    subtext
-) {
-
-    return (
-
-        '<div class="award-card">' +
-
-            '<div class="award-icon">' +
-            icon +
-            '</div>' +
-
-            '<div class="award-title">' +
-            title +
-            '</div>' +
-
-            '<div class="award-team">' +
-            team +
-            '</div>' +
-
-            '<div class="award-detail">' +
-            detail +
-            '</div>' +
-
-            '<div class="award-subtext">' +
-            subtext +
-            '</div>' +
-
-        '</div>'
-
-    );
-
 }
 
 
@@ -1581,186 +1641,125 @@ function awardCard(
 async function renderMatchups() {
 
     const state =
-        await sleeper(
-            "/state/nfl"
-        );
+        await sleeper("/state/nfl");
 
     const week =
         Number(state.week);
 
 
-    document.getElementById(
-        "week-label"
-    ).textContent =
+    document.getElementById("week-label").textContent =
         "WEEK " + week;
 
 
     const matchups =
         await sleeper(
-
             "/league/" +
             LEAGUE_ID +
             "/matchups/" +
             week
-
         );
 
 
     const rostersById = {};
 
-    GLOBAL_ROSTERS.forEach(
-        function(roster) {
-
-            rostersById[
-                roster.roster_id
-            ] = roster;
-
-        }
-    );
+    GLOBAL_ROSTERS.forEach(function(roster) {
+        rostersById[roster.roster_id] = roster;
+    });
 
 
     const grouped = {};
 
-    matchups.forEach(
-        function(matchup) {
+    CURRENT_WEEK_SCORES = {};
 
-            const id =
-                matchup.matchup_id;
 
-            if (
-                id === null ||
-                id === undefined
-            ) {
-                return;
-            }
+    matchups.forEach(function(matchup) {
 
-            if (!grouped[id]) {
-                grouped[id] = [];
-            }
+        CURRENT_WEEK_SCORES[
+            matchup.roster_id
+        ] = Number(matchup.points || 0);
 
-            grouped[id].push(
-                matchup
-            );
 
+        const id = matchup.matchup_id;
+
+        if (id === null || id === undefined) {
+            return;
         }
-    );
+
+        if (!grouped[id]) {
+            grouped[id] = [];
+        }
+
+        grouped[id].push(matchup);
+    });
 
 
     const grid =
-        document.getElementById(
-            "matchups-grid"
-        );
+        document.getElementById("matchups-grid");
 
     grid.innerHTML = "";
 
 
     const ids =
-        Object.keys(
-            grouped
-        ).sort(
-            function(a,b) {
-                return (
-                    Number(a) -
-                    Number(b)
-                );
-            }
-        );
+        Object.keys(grouped).sort(function(a,b) {
+            return Number(a) - Number(b);
+        });
 
 
     const games = [];
 
 
-    ids.forEach(
-        function(id) {
+    ids.forEach(function(id) {
 
-            const game =
-                grouped[id];
+        const game = grouped[id];
 
-            if (game.length !== 2) {
-                return;
-            }
+        if (game.length !== 2) return;
 
 
-            const first =
-                game[0];
+        const first = game[0];
+        const second = game[1];
 
-            const second =
-                game[1];
+        const rosterOne =
+            rostersById[first.roster_id];
 
+        const rosterTwo =
+            rostersById[second.roster_id];
 
-            const rosterOne =
-                rostersById[
-                    first.roster_id
-                ];
-
-            const rosterTwo =
-                rostersById[
-                    second.roster_id
-                ];
+        if (!rosterOne || !rosterTwo) return;
 
 
-            if (
-                !rosterOne ||
-                !rosterTwo
-            ) {
-                return;
-            }
+        const teamOne =
+            getTeamInfo(rosterOne);
+
+        const teamTwo =
+            getTeamInfo(rosterTwo);
+
+        const scoreOne =
+            Number(first.points || 0);
+
+        const scoreTwo =
+            Number(second.points || 0);
 
 
-            const teamOne =
-                getTeamInfo(
-                    rosterOne
-                );
-
-            const teamTwo =
-                getTeamInfo(
-                    rosterTwo
-                );
+        games.push({
+            teamOne:teamOne,
+            teamTwo:teamTwo,
+            scoreOne:scoreOne,
+            scoreTwo:scoreTwo
+        });
 
 
-            const scoreOne =
-                Number(
-                    first.points || 0
-                );
+        const card =
+            document.createElement("div");
 
-            const scoreTwo =
-                Number(
-                    second.points || 0
-                );
+        card.className = "matchup-card";
 
 
-            games.push({
-                teamOne: teamOne,
-                teamTwo: teamTwo,
-                scoreOne: scoreOne,
-                scoreTwo: scoreTwo
-            });
+        function teamRow(team,score,leading) {
 
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-            card.className =
-                "matchup-card";
-
-
-            function teamRow(
-                team,
-                score,
-                leading
-            ) {
-
-                return (
-
-                    '<div class="matchup-team ' +
-                    (
-                        leading
-                        ? 'leading'
-                        : ''
-                    ) +
-                    '">' +
+            return (
+                '<div class="matchup-team ' +
+                (leading ? 'leading' : '') +
+                '">' +
 
                     avatarHTML(
                         team.avatar,
@@ -1783,47 +1782,39 @@ async function renderMatchups() {
                     score.toFixed(2) +
                     '</div>' +
 
-                    '</div>'
-
-                );
-
-            }
+                '</div>'
+            );
+        }
 
 
-            card.innerHTML =
+        card.innerHTML =
 
-                teamRow(
-                    teamOne,
-                    scoreOne,
-                    scoreOne > scoreTwo
-                )
+            teamRow(
+                teamOne,
+                scoreOne,
+                scoreOne > scoreTwo
+            )
 
-                +
+            +
 
-                teamRow(
-                    teamTwo,
-                    scoreTwo,
-                    scoreTwo > scoreOne
-                );
-
-
-            grid.appendChild(
-                card
+            teamRow(
+                teamTwo,
+                scoreTwo,
+                scoreTwo > scoreOne
             );
 
-        }
-    );
+
+        grid.appendChild(card);
+    });
 
 
-    renderAwards(
-        games,
-        week
-    );
+    renderAwards(games,week);
 
+    renderPowerRankings();
 }
 
 
-/* LOAD SITE */
+/* LOAD */
 
 async function loadSite() {
 
@@ -1852,65 +1843,40 @@ async function loadSite() {
             ]);
 
 
-        const league =
-            results[0];
+        const league = results[0];
+        const users = results[1];
 
-        const users =
-            results[1];
-
-        GLOBAL_ROSTERS =
-            results[2];
-
+        GLOBAL_ROSTERS = results[2];
 
         GLOBAL_USERS_BY_ID = {};
 
-        users.forEach(
-            function(user) {
 
-                GLOBAL_USERS_BY_ID[
-                    user.user_id
-                ] = user;
-
-            }
-        );
+        users.forEach(function(user) {
+            GLOBAL_USERS_BY_ID[
+                user.user_id
+            ] = user;
+        });
 
 
-        document.getElementById(
-            "league-name"
-        ).textContent =
-
+        document.getElementById("league-name").textContent =
             league.name ||
             "Fantasy Football League";
 
 
-        document.getElementById(
-            "league-details"
-        ).textContent =
-
+        document.getElementById("league-details").textContent =
             league.season +
             " Season • " +
             league.total_rosters +
             " Teams";
 
 
-        document.getElementById(
-            "connection-status"
-        ).innerHTML =
-
-            '<span class="status">' +
-            '✓ LIVE SLEEPER DATA' +
-            '</span>';
+        document.getElementById("connection-status").innerHTML =
+            '<span class="status">✓ LIVE SLEEPER DATA</span>';
 
 
-        document.getElementById(
-            "league-summary"
-        ).textContent =
-
+        document.getElementById("league-summary").textContent =
             "League status: " +
-            (
-                league.status ||
-                "Unknown"
-            );
+            (league.status || "Unknown");
 
 
         renderStandings();
@@ -1922,35 +1888,25 @@ async function loadSite() {
 
             await renderMatchups();
 
-        } catch (error) {
+        } catch(error) {
 
             console.error(error);
 
-            document.getElementById(
-                "matchups-grid"
-            ).innerHTML =
+            document.getElementById("matchups-grid").innerHTML =
+                '<div class="error">Couldn\'t load matchups.</div>';
 
-                '<div class="error">' +
-                "Couldn't load matchups." +
-                '</div>';
-
+            document.getElementById("power-list").innerHTML =
+                '<div class="error">Couldn\'t calculate power rankings.</div>';
         }
 
 
-    } catch (error) {
+    } catch(error) {
 
         console.error(error);
 
-        document.getElementById(
-            "connection-status"
-        ).innerHTML =
-
-            '<span class="error">' +
-            'Unable to connect to Sleeper.' +
-            '</span>';
-
+        document.getElementById("connection-status").innerHTML =
+            '<span class="error">Unable to connect to Sleeper.</span>';
     }
-
 }
 
 
