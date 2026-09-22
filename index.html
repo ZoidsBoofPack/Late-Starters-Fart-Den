@@ -139,7 +139,7 @@ main {
     font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: .5px;
     margin-bottom: 9px;
 }
 
@@ -191,7 +191,7 @@ main {
 }
 
 .matchup-team.leading {
-    background: rgba(74, 222, 128, 0.06);
+    background: rgba(74,222,128,.06);
 }
 
 .matchup-avatar {
@@ -288,6 +288,209 @@ main {
     text-align: right;
 }
 
+
+/* TEAMS */
+
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.team-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-3px);
+    border-color: #4ade80;
+}
+
+.team-card-top {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.team-card-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #30363d;
+    object-fit: cover;
+}
+
+.team-card-name {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.team-card-manager {
+    color: #8b949e;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.team-card-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid #30363d;
+}
+
+.team-stat-label {
+    color: #8b949e;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.team-stat-value {
+    font-weight: bold;
+    margin-top: 3px;
+}
+
+
+/* TEAM PROFILE */
+
+.team-profile {
+    display: none;
+    margin-top: 25px;
+    background: #161b22;
+    border: 1px solid #4ade80;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.profile-header {
+    padding: 25px;
+    background: #21262d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.profile-team {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #30363d;
+    object-fit: cover;
+}
+
+.profile-name {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.profile-manager {
+    color: #8b949e;
+    margin-top: 5px;
+}
+
+.close-profile {
+    background: #30363d;
+    color: white;
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.close-profile:hover {
+    background: #4ade80;
+    color: #0d1117;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    border-bottom: 1px solid #30363d;
+}
+
+.profile-stat {
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-stat + .profile-stat {
+    border-left: 1px solid #30363d;
+}
+
+.profile-stat-number {
+    font-size: 22px;
+    font-weight: bold;
+    color: #4ade80;
+}
+
+.profile-stat-label {
+    color: #8b949e;
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+.roster-title {
+    padding: 20px 22px 10px;
+    margin: 0;
+}
+
+.roster-list {
+    padding: 10px 22px 22px;
+}
+
+.player-row {
+    display: grid;
+    grid-template-columns: 55px 1fr 90px 70px;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 0;
+    border-bottom: 1px solid #30363d;
+}
+
+.player-row:last-child {
+    border-bottom: none;
+}
+
+.player-position {
+    display: inline-block;
+    text-align: center;
+    background: #21262d;
+    border-radius: 6px;
+    padding: 5px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.player-name {
+    font-weight: bold;
+}
+
+.player-team {
+    color: #8b949e;
+    font-size: 12px;
+}
+
+.starter-badge {
+    color: #4ade80;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: right;
+}
+
 footer {
     text-align: center;
     color: #6e7681;
@@ -297,15 +500,17 @@ footer {
 
 
 @media (max-width: 900px) {
-
     .awards-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .teams-grid {
+        grid-template-columns: repeat(2,1fr);
     }
 }
 
 
 @media (max-width: 750px) {
-
     .matchups-grid {
         grid-template-columns: 1fr;
     }
@@ -314,7 +519,8 @@ footer {
 
 @media (max-width: 650px) {
 
-    .awards-grid {
+    .awards-grid,
+    .teams-grid {
         grid-template-columns: 1fr;
     }
 
@@ -328,8 +534,25 @@ footer {
         height: 34px;
     }
 
-    .manager {
-        font-size: 11px;
+    .profile-header {
+        align-items: flex-start;
+    }
+
+    .profile-avatar {
+        width: 55px;
+        height: 55px;
+    }
+
+    .profile-name {
+        font-size: 19px;
+    }
+
+    .player-row {
+        grid-template-columns: 45px 1fr 50px;
+    }
+
+    .starter-badge {
+        display: none;
     }
 
     nav {
@@ -351,20 +574,17 @@ footer {
     <a href="#awards">Awards</a>
     <a href="#matchups">Matchups</a>
     <a href="#standings">Standings</a>
-    <a href="#">Teams</a>
+    <a href="#teams">Teams</a>
     <a href="#">Power Rankings</a>
     <a href="#">History</a>
 </nav>
 
 <main>
 
-
 <section class="section">
-
     <h2 class="section-title">League Headquarters</h2>
 
     <div class="league-card">
-
         <p id="connection-status">
             Connecting to Sleeper...
         </p>
@@ -372,35 +592,24 @@ footer {
         <p id="league-summary">
             Loading league information...
         </p>
-
     </div>
-
 </section>
 
 
 <section class="section" id="awards">
 
     <div class="section-heading">
-
         <h2 class="section-title">
             🏅 Weekly Fart Den Awards
         </h2>
 
-        <span
-            id="awards-week"
-            class="week-label">
-        </span>
-
+        <span id="awards-week" class="week-label"></span>
     </div>
 
-    <div
-        id="awards-grid"
-        class="awards-grid">
-
+    <div id="awards-grid" class="awards-grid">
         <div class="loading">
             Calculating this week's nonsense...
         </div>
-
     </div>
 
 </section>
@@ -409,26 +618,17 @@ footer {
 <section class="section" id="matchups">
 
     <div class="section-heading">
-
         <h2 class="section-title">
             🏈 This Week
         </h2>
 
-        <span
-            id="week-label"
-            class="week-label">
-        </span>
-
+        <span id="week-label" class="week-label"></span>
     </div>
 
-    <div
-        id="matchups-grid"
-        class="matchups-grid">
-
+    <div id="matchups-grid" class="matchups-grid">
         <div class="loading">
             Loading matchups...
         </div>
-
     </div>
 
 </section>
@@ -443,20 +643,88 @@ footer {
     <div class="standings">
 
         <div class="standings-row standings-header">
-
             <div>RK</div>
             <div>Team</div>
             <div>Record</div>
             <div class="points">PF</div>
-
         </div>
 
         <div id="standings-body">
-
             <div class="loading">
                 Loading standings...
             </div>
+        </div>
 
+    </div>
+
+</section>
+
+
+<section class="section" id="teams">
+
+    <h2 class="section-title">
+        🏟️ The Franchises
+    </h2>
+
+    <div id="teams-grid" class="teams-grid">
+        <div class="loading">
+            Loading teams...
+        </div>
+    </div>
+
+
+    <div id="team-profile" class="team-profile">
+
+        <div class="profile-header">
+
+            <div class="profile-team">
+
+                <div id="profile-avatar-wrap"></div>
+
+                <div>
+                    <div id="profile-name" class="profile-name"></div>
+                    <div id="profile-manager" class="profile-manager"></div>
+                </div>
+
+            </div>
+
+            <button
+                class="close-profile"
+                onclick="closeTeamProfile()">
+                Close
+            </button>
+
+        </div>
+
+
+        <div class="profile-stats">
+
+            <div class="profile-stat">
+                <div id="profile-record" class="profile-stat-number"></div>
+                <div class="profile-stat-label">Record</div>
+            </div>
+
+            <div class="profile-stat">
+                <div id="profile-pf" class="profile-stat-number"></div>
+                <div class="profile-stat-label">Points For</div>
+            </div>
+
+            <div class="profile-stat">
+                <div id="profile-roster-count" class="profile-stat-number"></div>
+                <div class="profile-stat-label">Players</div>
+            </div>
+
+        </div>
+
+
+        <h3 class="roster-title">
+            Current Roster
+        </h3>
+
+        <div id="profile-roster" class="roster-list">
+            <div class="loading">
+                Loading NFL players...
+            </div>
         </div>
 
     </div>
@@ -476,6 +744,10 @@ footer {
 const LEAGUE_ID = "1313301144683958272";
 const API = "https://api.sleeper.app/v1";
 
+let GLOBAL_ROSTERS = [];
+let GLOBAL_USERS_BY_ID = {};
+let NFL_PLAYERS = null;
+
 
 async function sleeper(endpoint) {
 
@@ -483,12 +755,10 @@ async function sleeper(endpoint) {
         await fetch(API + endpoint);
 
     if (!response.ok) {
-
         throw new Error(
             "Sleeper API error: " +
             response.status
         );
-
     }
 
     return response.json();
@@ -501,9 +771,7 @@ function getPointsFor(settings) {
 
     return (
         Number(settings.fpts || 0) +
-        Number(
-            settings.fpts_decimal || 0
-        ) / 100
+        Number(settings.fpts_decimal || 0) / 100
     );
 }
 
@@ -521,13 +789,10 @@ function getAvatar(user) {
 }
 
 
-function getTeamInfo(
-    roster,
-    usersById
-) {
+function getTeamInfo(roster) {
 
     const owner =
-        usersById[
+        GLOBAL_USERS_BY_ID[
             roster.owner_id
         ] || {};
 
@@ -541,8 +806,7 @@ function getTeamInfo(
             ||
             owner.display_name
             ||
-            "Team " +
-            roster.roster_id,
+            "Team " + roster.roster_id,
 
         manager:
             owner.display_name ||
@@ -555,19 +819,12 @@ function getTeamInfo(
 }
 
 
-function avatarHTML(
-    url,
-    className
-) {
+function avatarHTML(url,className) {
 
     if (!url) {
-
-        return (
-            '<div class="' +
+        return '<div class="' +
             className +
-            '"></div>'
-        );
-
+            '"></div>';
     }
 
     return (
@@ -580,62 +837,48 @@ function avatarHTML(
 }
 
 
-/* -------------------------
-   STANDINGS
--------------------------- */
+function rosterRecord(roster) {
 
-function renderStandings(
-    rosters,
-    usersById
-) {
+    const settings =
+        roster.settings || {};
+
+    let record =
+        Number(settings.wins || 0) +
+        "-" +
+        Number(settings.losses || 0);
+
+    if (Number(settings.ties || 0) > 0) {
+        record +=
+            "-" +
+            Number(settings.ties);
+    }
+
+    return record;
+}
+
+
+/* STANDINGS */
+
+function renderStandings() {
 
     const standings =
-        rosters.map(
+        GLOBAL_ROSTERS.map(
             function(roster) {
 
                 const team =
-                    getTeamInfo(
-                        roster,
-                        usersById
-                    );
+                    getTeamInfo(roster);
 
                 return {
-
-                    teamName:
-                        team.name,
-
-                    manager:
-                        team.manager,
-
-                    avatar:
-                        team.avatar,
-
-                    wins:
-                        Number(
-                            roster.settings &&
-                            roster.settings.wins
-                            || 0
-                        ),
-
-                    losses:
-                        Number(
-                            roster.settings &&
-                            roster.settings.losses
-                            || 0
-                        ),
-
-                    ties:
-                        Number(
-                            roster.settings &&
-                            roster.settings.ties
-                            || 0
-                        ),
-
+                    roster: roster,
+                    team: team,
+                    wins: Number(
+                        roster.settings &&
+                        roster.settings.wins || 0
+                    ),
                     pointsFor:
                         getPointsFor(
                             roster.settings
                         )
-
                 };
 
             }
@@ -643,25 +886,16 @@ function renderStandings(
 
 
     standings.sort(
-        function(a, b) {
+        function(a,b) {
 
-            if (
-                b.wins !==
-                a.wins
-            ) {
-
-                return (
-                    b.wins -
-                    a.wins
-                );
-
+            if (b.wins !== a.wins) {
+                return b.wins - a.wins;
             }
 
             return (
                 b.pointsFor -
                 a.pointsFor
             );
-
         }
     );
 
@@ -675,7 +909,7 @@ function renderStandings(
 
 
     standings.forEach(
-        function(team, index) {
+        function(item,index) {
 
             const row =
                 document.createElement(
@@ -685,42 +919,27 @@ function renderStandings(
             row.className =
                 "standings-row";
 
-
-            let record =
-                team.wins +
-                "-" +
-                team.losses;
-
-            if (team.ties > 0) {
-
-                record +=
-                    "-" +
-                    team.ties;
-
-            }
-
-
             row.innerHTML =
 
                 '<div class="rank">' +
-                    (index + 1) +
+                (index + 1) +
                 '</div>' +
 
                 '<div class="team">' +
 
                     avatarHTML(
-                        team.avatar,
+                        item.team.avatar,
                         "avatar"
                     ) +
 
                     '<div>' +
 
                         '<div class="team-name">' +
-                            team.teamName +
+                        item.team.name +
                         '</div>' +
 
                         '<div class="manager">' +
-                            team.manager +
+                        item.team.manager +
                         '</div>' +
 
                     '</div>' +
@@ -728,11 +947,13 @@ function renderStandings(
                 '</div>' +
 
                 '<div class="record">' +
-                    record +
+                rosterRecord(
+                    item.roster
+                ) +
                 '</div>' +
 
                 '<div class="points">' +
-                    team.pointsFor.toFixed(2) +
+                item.pointsFor.toFixed(2) +
                 '</div>';
 
 
@@ -743,9 +964,368 @@ function renderStandings(
 }
 
 
-/* -------------------------
-   WEEKLY AWARDS
--------------------------- */
+/* TEAMS */
+
+function renderTeams() {
+
+    const grid =
+        document.getElementById(
+            "teams-grid"
+        );
+
+    grid.innerHTML = "";
+
+
+    GLOBAL_ROSTERS.forEach(
+        function(roster) {
+
+            const team =
+                getTeamInfo(roster);
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "team-card";
+
+
+            card.onclick =
+                function() {
+
+                    openTeamProfile(
+                        roster.roster_id
+                    );
+
+                };
+
+
+            card.innerHTML =
+
+                '<div class="team-card-top">' +
+
+                    avatarHTML(
+                        team.avatar,
+                        "team-card-avatar"
+                    ) +
+
+                    '<div>' +
+
+                        '<div class="team-card-name">' +
+                        team.name +
+                        '</div>' +
+
+                        '<div class="team-card-manager">' +
+                        team.manager +
+                        '</div>' +
+
+                    '</div>' +
+
+                '</div>' +
+
+                '<div class="team-card-stats">' +
+
+                    '<div>' +
+                        '<div class="team-stat-label">Record</div>' +
+                        '<div class="team-stat-value">' +
+                        rosterRecord(roster) +
+                        '</div>' +
+                    '</div>' +
+
+                    '<div>' +
+                        '<div class="team-stat-label">PF</div>' +
+                        '<div class="team-stat-value">' +
+                        getPointsFor(
+                            roster.settings
+                        ).toFixed(2) +
+                        '</div>' +
+                    '</div>' +
+
+                '</div>';
+
+
+            grid.appendChild(card);
+
+        }
+    );
+}
+
+
+async function openTeamProfile(
+    rosterId
+) {
+
+    const roster =
+        GLOBAL_ROSTERS.find(
+            function(item) {
+                return (
+                    item.roster_id ===
+                    rosterId
+                );
+            }
+        );
+
+    if (!roster) {
+        return;
+    }
+
+
+    const team =
+        getTeamInfo(roster);
+
+
+    document.getElementById(
+        "profile-avatar-wrap"
+    ).innerHTML =
+        avatarHTML(
+            team.avatar,
+            "profile-avatar"
+        );
+
+
+    document.getElementById(
+        "profile-name"
+    ).textContent =
+        team.name;
+
+
+    document.getElementById(
+        "profile-manager"
+    ).textContent =
+        "Manager: " +
+        team.manager;
+
+
+    document.getElementById(
+        "profile-record"
+    ).textContent =
+        rosterRecord(roster);
+
+
+    document.getElementById(
+        "profile-pf"
+    ).textContent =
+        getPointsFor(
+            roster.settings
+        ).toFixed(2);
+
+
+    const playerIds =
+        roster.players || [];
+
+
+    document.getElementById(
+        "profile-roster-count"
+    ).textContent =
+        playerIds.length;
+
+
+    const profile =
+        document.getElementById(
+            "team-profile"
+        );
+
+    profile.style.display =
+        "block";
+
+
+    document.getElementById(
+        "profile-roster"
+    ).innerHTML =
+        '<div class="loading">' +
+        'Loading roster...' +
+        '</div>';
+
+
+    profile.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+
+    try {
+
+        if (!NFL_PLAYERS) {
+
+            NFL_PLAYERS =
+                await sleeper(
+                    "/players/nfl"
+                );
+
+        }
+
+
+        const starters =
+            new Set(
+                roster.starters || []
+            );
+
+
+        const players =
+            playerIds.map(
+                function(id) {
+
+                    const player =
+                        NFL_PLAYERS[id];
+
+                    if (!player) {
+
+                        return {
+                            id: id,
+                            name: "Player " + id,
+                            position: "?",
+                            team: "",
+                            starter:
+                                starters.has(id)
+                        };
+
+                    }
+
+
+                    return {
+
+                        id: id,
+
+                        name:
+                            player.full_name
+                            ||
+                            (
+                                (
+                                    player.first_name
+                                    || ""
+                                )
+                                +
+                                " "
+                                +
+                                (
+                                    player.last_name
+                                    || ""
+                                )
+                            ).trim()
+                            ||
+                            "Unknown Player",
+
+                        position:
+                            player.position
+                            || "?",
+
+                        team:
+                            player.team
+                            || "FA",
+
+                        starter:
+                            starters.has(id)
+
+                    };
+
+                }
+            );
+
+
+        players.sort(
+            function(a,b) {
+
+                if (
+                    a.starter !==
+                    b.starter
+                ) {
+
+                    return (
+                        a.starter
+                        ? -1
+                        : 1
+                    );
+
+                }
+
+                return (
+                    a.position || ""
+                ).localeCompare(
+                    b.position || ""
+                );
+
+            }
+        );
+
+
+        const list =
+            document.getElementById(
+                "profile-roster"
+            );
+
+        list.innerHTML = "";
+
+
+        players.forEach(
+            function(player) {
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+                row.className =
+                    "player-row";
+
+
+                row.innerHTML =
+
+                    '<div class="player-position">' +
+                    player.position +
+                    '</div>' +
+
+                    '<div class="player-name">' +
+                    player.name +
+                    '</div>' +
+
+                    '<div class="player-team">' +
+                    player.team +
+                    '</div>' +
+
+                    '<div class="starter-badge">' +
+                    (
+                        player.starter
+                        ? "STARTER"
+                        : ""
+                    ) +
+                    '</div>';
+
+
+                list.appendChild(row);
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "profile-roster"
+        ).innerHTML =
+
+            '<div class="error">' +
+            "Couldn't load player names." +
+            '</div>';
+
+    }
+
+}
+
+
+function closeTeamProfile() {
+
+    document.getElementById(
+        "team-profile"
+    ).style.display =
+        "none";
+
+}
+
+
+/* AWARDS */
 
 function renderAwards(
     games,
@@ -763,17 +1343,6 @@ function renderAwards(
         "WEEK " + week;
 
 
-    if (!games.length) {
-
-        grid.innerHTML =
-            '<div class="loading">' +
-            'Awards will appear once matchups are available.' +
-            '</div>';
-
-        return;
-    }
-
-
     const teams = [];
 
     games.forEach(
@@ -782,7 +1351,6 @@ function renderAwards(
             teams.push({
                 name:
                     game.teamOne.name,
-
                 score:
                     game.scoreOne
             });
@@ -790,7 +1358,6 @@ function renderAwards(
             teams.push({
                 name:
                     game.teamTwo.name,
-
                 score:
                     game.scoreTwo
             });
@@ -807,19 +1374,24 @@ function renderAwards(
         );
 
 
-    if (!scoringStarted) {
+    if (
+        !games.length ||
+        !scoringStarted
+    ) {
 
         grid.innerHTML =
 
-            '<div class="league-card" style="grid-column: 1 / -1;">' +
+            '<div class="league-card" style="grid-column:1/-1;">' +
 
-                '<strong>Week ' +
-                week +
-                ' awards are waiting for kickoff.</strong>' +
+            '<strong>' +
+            'Week ' +
+            week +
+            ' awards are waiting for kickoff.' +
+            '</strong>' +
 
-                '<p style="color:#8b949e; margin-bottom:0;">' +
-                'Once points start hitting the board, the Fart Den will begin handing out honors and public humiliation.' +
-                '</p>' +
+            '<p style="color:#8b949e;margin-bottom:0;">' +
+            'Once points start hitting the board, the Fart Den will begin handing out honors and public humiliation.' +
+            '</p>' +
 
             '</div>';
 
@@ -829,30 +1401,24 @@ function renderAwards(
 
     const highest =
         teams.reduce(
-            function(best, team) {
-
+            function(a,b) {
                 return (
-                    team.score >
-                    best.score
-                )
-                ? team
-                : best;
-
+                    b.score > a.score
+                    ? b
+                    : a
+                );
             }
         );
 
 
     const lowest =
         teams.reduce(
-            function(worst, team) {
-
+            function(a,b) {
                 return (
-                    team.score <
-                    worst.score
-                )
-                ? team
-                : worst;
-
+                    b.score < a.score
+                    ? b
+                    : a
+                );
             }
         );
 
@@ -862,25 +1428,12 @@ function renderAwards(
             function(game) {
 
                 return {
-
-                    teamOne:
-                        game.teamOne,
-
-                    teamTwo:
-                        game.teamTwo,
-
-                    scoreOne:
-                        game.scoreOne,
-
-                    scoreTwo:
-                        game.scoreTwo,
-
+                    game: game,
                     margin:
                         Math.abs(
                             game.scoreOne -
                             game.scoreTwo
                         )
-
                 };
 
             }
@@ -889,194 +1442,143 @@ function renderAwards(
 
     const biggest =
         margins.reduce(
-            function(best, game) {
-
+            function(a,b) {
                 return (
-                    game.margin >
-                    best.margin
-                )
-                ? game
-                : best;
-
+                    b.margin > a.margin
+                    ? b
+                    : a
+                );
             }
         );
 
 
     const closest =
         margins.reduce(
-            function(best, game) {
-
+            function(a,b) {
                 return (
-                    game.margin <
-                    best.margin
-                )
-                ? game
-                : best;
-
+                    b.margin < a.margin
+                    ? b
+                    : a
+                );
             }
         );
 
 
-    let blowoutWinner;
-    let blowoutLoser;
+    function winner(game) {
 
-    if (
-        biggest.scoreOne >
-        biggest.scoreTwo
-    ) {
-
-        blowoutWinner =
-            biggest.teamOne.name;
-
-        blowoutLoser =
-            biggest.teamTwo.name;
-
-    } else {
-
-        blowoutWinner =
-            biggest.teamTwo.name;
-
-        blowoutLoser =
-            biggest.teamOne.name;
+        return (
+            game.scoreOne >
+            game.scoreTwo
+        )
+        ? game.teamOne.name
+        : game.teamTwo.name;
 
     }
 
 
-    let closeWinner;
-    let closeLoser;
+    function loser(game) {
 
-    if (
-        closest.scoreOne >
-        closest.scoreTwo
-    ) {
-
-        closeWinner =
-            closest.teamOne.name;
-
-        closeLoser =
-            closest.teamTwo.name;
-
-    } else {
-
-        closeWinner =
-            closest.teamTwo.name;
-
-        closeLoser =
-            closest.teamOne.name;
+        return (
+            game.scoreOne >
+            game.scoreTwo
+        )
+        ? game.teamTwo.name
+        : game.teamOne.name;
 
     }
 
 
     grid.innerHTML =
 
-        '<div class="award-card">' +
+        awardCard(
+            "👑",
+            "King of the Fart Den",
+            highest.name,
+            highest.score.toFixed(2) +
+            " points",
+            "Highest score of the week"
+        )
 
-            '<div class="award-icon">👑</div>' +
+        +
 
-            '<div class="award-title">' +
-                'King of the Fart Den' +
-            '</div>' +
+        awardCard(
+            "💩",
+            "Basement Dweller",
+            lowest.name,
+            lowest.score.toFixed(2) +
+            " points",
+            "Someone had to finish last"
+        )
 
-            '<div class="award-team">' +
-                highest.name +
-            '</div>' +
+        +
 
-            '<div class="award-detail">' +
-                highest.score.toFixed(2) +
-                ' points' +
-            '</div>' +
+        awardCard(
+            "🔨",
+            "Ass Whooping of the Week",
+            winner(biggest.game),
+            "Won by " +
+            biggest.margin.toFixed(2),
+            "Victim: " +
+            loser(biggest.game)
+        )
 
-            '<div class="award-subtext">' +
-                'Highest score of the week' +
-            '</div>' +
+        +
 
-        '</div>' +
-
-
-        '<div class="award-card">' +
-
-            '<div class="award-icon">💩</div>' +
-
-            '<div class="award-title">' +
-                'Basement Dweller' +
-            '</div>' +
-
-            '<div class="award-team">' +
-                lowest.name +
-            '</div>' +
-
-            '<div class="award-detail">' +
-                lowest.score.toFixed(2) +
-                ' points' +
-            '</div>' +
-
-            '<div class="award-subtext">' +
-                'Someone had to finish last' +
-            '</div>' +
-
-        '</div>' +
-
-
-        '<div class="award-card">' +
-
-            '<div class="award-icon">🔨</div>' +
-
-            '<div class="award-title">' +
-                'Ass Whooping of the Week' +
-            '</div>' +
-
-            '<div class="award-team">' +
-                blowoutWinner +
-            '</div>' +
-
-            '<div class="award-detail">' +
-                'Won by ' +
-                biggest.margin.toFixed(2) +
-            '</div>' +
-
-            '<div class="award-subtext">' +
-                'Victim: ' +
-                blowoutLoser +
-            '</div>' +
-
-        '</div>' +
-
-
-        '<div class="award-card">' +
-
-            '<div class="award-icon">😬</div>' +
-
-            '<div class="award-title">' +
-                'Heartbreaker' +
-            '</div>' +
-
-            '<div class="award-team">' +
-                closeLoser +
-            '</div>' +
-
-            '<div class="award-detail">' +
-                'Lost by ' +
-                closest.margin.toFixed(2) +
-            '</div>' +
-
-            '<div class="award-subtext">' +
-                'Winner: ' +
-                closeWinner +
-            '</div>' +
-
-        '</div>';
+        awardCard(
+            "😬",
+            "Heartbreaker",
+            loser(closest.game),
+            "Lost by " +
+            closest.margin.toFixed(2),
+            "Winner: " +
+            winner(closest.game)
+        );
 
 }
 
 
-/* -------------------------
-   MATCHUPS
--------------------------- */
-
-async function renderMatchups(
-    rosters,
-    usersById
+function awardCard(
+    icon,
+    title,
+    team,
+    detail,
+    subtext
 ) {
+
+    return (
+
+        '<div class="award-card">' +
+
+            '<div class="award-icon">' +
+            icon +
+            '</div>' +
+
+            '<div class="award-title">' +
+            title +
+            '</div>' +
+
+            '<div class="award-team">' +
+            team +
+            '</div>' +
+
+            '<div class="award-detail">' +
+            detail +
+            '</div>' +
+
+            '<div class="award-subtext">' +
+            subtext +
+            '</div>' +
+
+        '</div>'
+
+    );
+
+}
+
+
+/* MATCHUPS */
+
+async function renderMatchups() {
 
     const state =
         await sleeper(
@@ -1106,7 +1608,7 @@ async function renderMatchups(
 
     const rostersById = {};
 
-    rosters.forEach(
+    GLOBAL_ROSTERS.forEach(
         function(roster) {
 
             rostersById[
@@ -1156,13 +1658,11 @@ async function renderMatchups(
         Object.keys(
             grouped
         ).sort(
-            function(a, b) {
-
+            function(a,b) {
                 return (
                     Number(a) -
                     Number(b)
                 );
-
             }
         );
 
@@ -1176,9 +1676,7 @@ async function renderMatchups(
             const game =
                 grouped[id];
 
-            if (
-                game.length !== 2
-            ) {
+            if (game.length !== 2) {
                 return;
             }
 
@@ -1211,14 +1709,12 @@ async function renderMatchups(
 
             const teamOne =
                 getTeamInfo(
-                    rosterOne,
-                    usersById
+                    rosterOne
                 );
 
             const teamTwo =
                 getTeamInfo(
-                    rosterTwo,
-                    usersById
+                    rosterTwo
                 );
 
 
@@ -1234,19 +1730,10 @@ async function renderMatchups(
 
 
             games.push({
-
-                teamOne:
-                    teamOne,
-
-                teamTwo:
-                    teamTwo,
-
-                scoreOne:
-                    scoreOne,
-
-                scoreTwo:
-                    scoreTwo
-
+                teamOne: teamOne,
+                teamTwo: teamTwo,
+                scoreOne: scoreOne,
+                scoreTwo: scoreTwo
             });
 
 
@@ -1259,7 +1746,7 @@ async function renderMatchups(
                 "matchup-card";
 
 
-            function makeTeamRow(
+            function teamRow(
                 team,
                 score,
                 leading
@@ -1275,26 +1762,26 @@ async function renderMatchups(
                     ) +
                     '">' +
 
-                        avatarHTML(
-                            team.avatar,
-                            "matchup-avatar"
-                        ) +
+                    avatarHTML(
+                        team.avatar,
+                        "matchup-avatar"
+                    ) +
 
-                        '<div>' +
+                    '<div>' +
 
-                            '<div class="matchup-name">' +
-                                team.name +
-                            '</div>' +
-
-                            '<div class="matchup-manager">' +
-                                team.manager +
-                            '</div>' +
-
+                        '<div class="matchup-name">' +
+                        team.name +
                         '</div>' +
 
-                        '<div class="matchup-score">' +
-                            score.toFixed(2) +
+                        '<div class="matchup-manager">' +
+                        team.manager +
                         '</div>' +
+
+                    '</div>' +
+
+                    '<div class="matchup-score">' +
+                    score.toFixed(2) +
+                    '</div>' +
 
                     '</div>'
 
@@ -1305,7 +1792,7 @@ async function renderMatchups(
 
             card.innerHTML =
 
-                makeTeamRow(
+                teamRow(
                     teamOne,
                     scoreOne,
                     scoreOne > scoreTwo
@@ -1313,7 +1800,7 @@ async function renderMatchups(
 
                 +
 
-                makeTeamRow(
+                teamRow(
                     teamTwo,
                     scoreTwo,
                     scoreTwo > scoreOne
@@ -1328,17 +1815,6 @@ async function renderMatchups(
     );
 
 
-    if (!games.length) {
-
-        grid.innerHTML =
-            '<div class="loading">' +
-            'No matchups available for Week ' +
-            week +
-            '.</div>';
-
-    }
-
-
     renderAwards(
         games,
         week
@@ -1347,9 +1823,7 @@ async function renderMatchups(
 }
 
 
-/* -------------------------
-   LOAD EVERYTHING
--------------------------- */
+/* LOAD SITE */
 
 async function loadSite() {
 
@@ -1384,8 +1858,21 @@ async function loadSite() {
         const users =
             results[1];
 
-        const rosters =
+        GLOBAL_ROSTERS =
             results[2];
+
+
+        GLOBAL_USERS_BY_ID = {};
+
+        users.forEach(
+            function(user) {
+
+                GLOBAL_USERS_BY_ID[
+                    user.user_id
+                ] = user;
+
+            }
+        );
 
 
         document.getElementById(
@@ -1426,53 +1913,25 @@ async function loadSite() {
             );
 
 
-        const usersById = {};
+        renderStandings();
 
-        users.forEach(
-            function(user) {
-
-                usersById[
-                    user.user_id
-                ] = user;
-
-            }
-        );
-
-
-        renderStandings(
-            rosters,
-            usersById
-        );
+        renderTeams();
 
 
         try {
 
-            await renderMatchups(
-                rosters,
-                usersById
-            );
+            await renderMatchups();
 
-        } catch (matchupError) {
+        } catch (error) {
 
-            console.error(
-                matchupError
-            );
+            console.error(error);
 
             document.getElementById(
                 "matchups-grid"
             ).innerHTML =
 
-                '<div class="loading error">' +
-                "Couldn't load this week's matchups." +
-                '</div>';
-
-
-            document.getElementById(
-                "awards-grid"
-            ).innerHTML =
-
-                '<div class="loading error">' +
-                "Couldn't calculate this week's awards." +
+                '<div class="error">' +
+                "Couldn't load matchups." +
                 '</div>';
 
         }
@@ -1482,7 +1941,6 @@ async function loadSite() {
 
         console.error(error);
 
-
         document.getElementById(
             "connection-status"
         ).innerHTML =
@@ -1490,33 +1948,6 @@ async function loadSite() {
             '<span class="error">' +
             'Unable to connect to Sleeper.' +
             '</span>';
-
-
-        document.getElementById(
-            "standings-body"
-        ).innerHTML =
-
-            '<div class="loading error">' +
-            "Couldn't load standings." +
-            '</div>';
-
-
-        document.getElementById(
-            "matchups-grid"
-        ).innerHTML =
-
-            '<div class="loading error">' +
-            "Couldn't load matchups." +
-            '</div>';
-
-
-        document.getElementById(
-            "awards-grid"
-        ).innerHTML =
-
-            '<div class="loading error">' +
-            "Couldn't calculate awards." +
-            '</div>';
 
     }
 
