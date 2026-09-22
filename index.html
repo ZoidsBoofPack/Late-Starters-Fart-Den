@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Fantasy Football League</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #10131a;
+      color: white;
+    }
+
+    header {
+      background: #171c26;
+      padding: 30px;
+      text-align: center;
+      border-bottom: 3px solid #4ade80;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 38px;
+    }
+
+    header p {
+      color: #9ca3af;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      padding: 15px;
+      background: #0b0e13;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #4ade80;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .card {
+      background: #171c26;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    .status {
+      color: #4ade80;
+    }
+
+    #league-name {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    #league-info {
+      color: #9ca3af;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1 id="league-name">Loading League...</h1>
+  <p id="league-info">Connecting to Sleeper...</p>
+</header>
+
+<nav>
+  <a href="#">Home</a>
+  <a href="#">Matchups</a>
+  <a href="#">Standings</a>
+  <a href="#">Teams</a>
+  <a href="#">Power Rankings</a>
+  <a href="#">History</a>
+</nav>
+
+<main>
+
+  <div class="card">
+    <h2>League Headquarters</h2>
+    <p>
+      Welcome to the official league website.
+    </p>
+
+    <p class="status" id="connection-status">
+      Connecting to Sleeper...
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Current Season</h2>
+    <p id="season-info">Loading...</p>
+  </div>
+
+</main>
+
+<script>
+  const LEAGUE_ID = "1313301144683958272";
+
+  async function loadLeague() {
+    try {
+      const response = await fetch(
+        `https://api.sleeper.app/v1/league/${LEAGUE_ID}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Sleeper request failed");
+      }
+
+      const league = await response.json();
+
+      document.getElementById("league-name").textContent =
+        league.name;
+
+      document.getElementById("league-info").textContent =
+        `${league.season} Fantasy Football`;
+
+      document.getElementById("season-info").textContent =
+        `${league.total_rosters} teams competing in the ${league.season} season.`;
+
+      document.getElementById("connection-status").textContent =
+        "✓ Connected to Sleeper";
+
+    } catch (error) {
+      document.getElementById("connection-status").textContent =
+        "Unable to connect to Sleeper.";
+
+      console.error(error);
+    }
+  }
+
+  loadLeague();
+</script>
+
+</body>
+</html>
